@@ -1,9 +1,9 @@
-using System.Diagnostics;
 using MailKit;
 using MailKit.Net.Imap;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using settings;
 
 public class Worker : BackgroundService
 {
@@ -42,30 +42,42 @@ public class Worker : BackgroundService
                     var inbox = client.Inbox;
                     await inbox.OpenAsync(FolderAccess.ReadWrite, stoppingToken);
 
-                    var messages = await inbox.FetchAsync(0, inbox.Count - 1, MessageSummaryItems.Flags | MessageSummaryItems.UniqueId, stoppingToken);
-
-
-                    var fullMessage = inbox.GetMessage(inbox.Count - 1);
-
-                    Console.WriteLine($"De: {fullMessage.From}");
-                    Console.WriteLine($"Assunto: {fullMessage.Subject}");
-                    Console.WriteLine($"Data: {fullMessage.Date}");
-                    Console.WriteLine($"Corpo: {fullMessage.TextBody?.Trim() ?? "(Sem conteúdo de texto)"}");
-
-
-
-                    if (messages.Last().Flags == MessageFlags.Seen)
+                    if (inbox.Count > 0)
                     {
 
 
+
+                        // var messages = await inbox.FetchAsync(0, inbox.Count - 1, MessageSummaryItems.Flags | MessageSummaryItems.UniqueId, stoppingToken);
+
+
+                        // var fullMessage = inbox.GetMessage(inbox.Count);
+
+                        // Console.WriteLine($"De: {fullMessage.From}");
+                        // Console.WriteLine($"Assunto: {fullMessage.Subject}");
+                        // Console.WriteLine($"Data: {fullMessage.Date}");
+                        // Console.WriteLine($"Corpo: {fullMessage.TextBody?.Trim() ?? "(Sem conteúdo de texto)"}");
+
+                        //  Console.WriteLine($"Id: {messages.Last().UniqueId}");
+
+                        // if (messages.Last().Flags == MessageFlags.Seen)
+                        // {
+
+
+                        // }
+                        // else
+                        // {
+                        //     inbox.AddFlags(messages.Last().UniqueId, MessageFlags.Seen, true);
+                        //     inbox.Expunge(); //force synchronization with server
+                        //     Process.Start(@"c:\windows\system32\calc.exe");
+                        //     Console.WriteLine("Status: Não lida");
+                        // }
                     }
                     else
                     {
-                        inbox.AddFlags(messages.Last().UniqueId, MessageFlags.Seen, true);
-                        inbox.Expunge(); //force synchronization with server
-                        Process.Start(@"c:\windows\system32\calc.exe");
-                        Console.WriteLine("Status: Não lida");
+                       Console.WriteLine("Inbox is empty.");
+                      
                     }
+
 
                     //disconnect from the server
                     await client.DisconnectAsync(true, stoppingToken);
