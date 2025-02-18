@@ -41,14 +41,21 @@ public class Conditions
             else if (computer.ToLower() == "everyone")
             {
                 computerFound = true;
+                break;
             }
         }
 
         var checkedCodeExecution = CheckCodeExecution(codeExecution);
-        var checkGroup = String.IsNullOrEmpty(groupToExecution);
+        var checkGroup = !String.IsNullOrEmpty(groupToExecution);
         var computerToExecute = computerFound;
 
-        Console.WriteLine($"RESULT: {computerFound}");
+        // Console.WriteLine($"RESULT: {checkedCodeExecution}, {checkGroup}, {computerToExecute}");
+
+        if (checkedCodeExecution && checkGroup && computerToExecute)
+        {
+            Console.WriteLine(lastMsg.Body.ToString().ToLower().Contains("desligar"));
+        }
+
 
     }
 

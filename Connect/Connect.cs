@@ -51,30 +51,13 @@ public class Connect : BackgroundService
                     {
                         var messages = await inbox.FetchAsync(0, inbox.Count - 1, MessageSummaryItems.Flags | MessageSummaryItems.UniqueId, stoppingToken);
 
-
                         var fullMessage = inbox.GetMessage(messages.Last().UniqueId);
-                        // Console.WriteLine(fullMessage);
 
                         var lastMsg = messages.Last();
 
                         Conditions Cond = new Conditions(_remoteCmdJsonConf);
 
                         Cond.ConditionsToExecute(fullMessage, messages.Last().UniqueId);
-
-
-
-                        // if (messages.Last().Flags == MessageFlags.Seen)
-                        // {
-
-
-                        // }
-                        // else
-                        // {
-                        //     inbox.AddFlags(messages.Last().UniqueId, MessageFlags.Seen, true);
-                        //     inbox.Expunge(); //force synchronization with server
-                        //                      //  Process.Start(@"c:\windows\system32\calc.exe");
-                        //     Console.WriteLine("Status: Não lida");
-                        // }
                     }
                     else
                     {
