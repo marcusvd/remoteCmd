@@ -1,4 +1,4 @@
-public class ServerImap
+public class ServerSmtp
 {
     public string Server { get; set; } = string.Empty;
     public int Port { get; set; }

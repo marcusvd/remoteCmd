@@ -4,16 +4,16 @@ using System.Text.Json;
 
 public class JsonOperations
 {
-    private RemoteCmdJsonConf? _remoteCmdJsonConf;
+    private Appsettings? _Appsettings;
     public JsonOperations()
     {
-        _remoteCmdJsonConf = null;
+        _Appsettings = null;
     }
     public JsonOperations(
-        RemoteCmdJsonConf RemoteCmdJsonConf
+        Appsettings Appsettings
         )
     {
-        _remoteCmdJsonConf = RemoteCmdJsonConf;
+        _Appsettings = Appsettings;
     }
 
 
@@ -26,7 +26,7 @@ public class JsonOperations
             WriteIndented = true
         };
 
-        string json = JsonSerializer.Serialize(_remoteCmdJsonConf, options);
+        string json = JsonSerializer.Serialize(_Appsettings, options);
         string nameFileToSave = "appSettings.json";
 
         try
@@ -41,13 +41,13 @@ public class JsonOperations
         Console.WriteLine(json);
     }
 
-    public RemoteCmdJsonConf jsonLoad(string pathJsonFile)
+    public Appsettings LoadAppSettingsJson(string pathJsonFile)
     {
         try
         {
             string jsonfile = File.ReadAllText(pathJsonFile);
-            var appSettings = new RemoteCmdJsonConf();
-            appSettings = JsonSerializer.Deserialize<RemoteCmdJsonConf>(jsonfile);
+            var appSettings = new Appsettings();
+            appSettings = JsonSerializer.Deserialize<Appsettings>(jsonfile);
 
             if (appSettings != null)
                 return appSettings;
@@ -59,15 +59,70 @@ public class JsonOperations
             Console.WriteLine($"Error when load file JSON: {ex.Message}", "Error");
         }
 
-        return new RemoteCmdJsonConf();
+        return new Appsettings();
     }
 
-    public void FillForm(RemoteCmdJsonConf entity)
+    public AppSettingsPath LoadAppSettingsPathJson(string pathJsonFile)
     {
+        try
+        {
+            string jsonfile = File.ReadAllText(pathJsonFile);
+            var appSettingsPath = new AppSettingsPath();
+            appSettingsPath = JsonSerializer.Deserialize<AppSettingsPath>(jsonfile);
 
+            if (appSettingsPath != null)
+                return appSettingsPath;
+
+        }
+
+        catch (Exception)
+        {
+            Console.WriteLine($"JSON file not found.", "Information");
+        }
+
+        return new AppSettingsPath();
     }
 
+    public void JsonWriteLastExecution(string pathJsonFile, int uniqueId)
+    {
+        string nameFileToSave = pathJsonFile;
+        string json;
 
+        if (File.Exists(nameFileToSave))
+        {
+            json = File.ReadAllText(nameFileToSave);
+        }
+        else
+        {
+            Console.WriteLine("Arquivo JSON não encontrado.");
+            return;
+        }
 
+        var options = new JsonSerializerOptions
+        {
+            WriteIndented = true
+        };
 
+        try
+        {
+            // Desserializar JSON existente
+            var appSettings = JsonSerializer.Deserialize<Appsettings>(json) ?? new Appsettings();
+
+            // Atualizar propriedade desejada
+            appSettings.ServiceConf.LastExecution = uniqueId;
+
+            // Serializar novamente o objeto para JSON
+            json = JsonSerializer.Serialize(appSettings, options);
+
+            // Salvar JSON atualizado no arquivo
+            File.WriteAllText(nameFileToSave, json);
+
+            Console.WriteLine("JSON updated successfully.");
+            Console.WriteLine(json);
+        }
+        catch (IOException ex)
+        {
+            Console.WriteLine($"Erro: {ex.Message}");
+        }
+    }
 }

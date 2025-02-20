@@ -3,30 +3,29 @@ using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
 using MailKit;
 using MimeKit;
-using Org.BouncyCastle.Crypto.Prng;
 
 public class Conditions
 {
-    private readonly RemoteCmdJsonConf _remoteCmdJsonConf;
-    public Conditions(RemoteCmdJsonConf remoteCmdJsonConf)
+    private readonly Appsettings _Appsettings;
+    public Conditions(Appsettings Appsettings)
     {
-        _remoteCmdJsonConf = remoteCmdJsonConf;
+        _Appsettings = Appsettings;
     }
 
-    public void ConditionsToExecute(MimeMessage lastMsg, UniqueId UniqueId)
+    public void ConditionsToExecute(IMessageSummary msg, int uniqueId, IMailFolder inbox)
     {
-        var codeExecution = GetCodeExecution(lastMsg.Subject);
+        // var codeExecution = GetCodeExecution(lastMsg.Subject);
 
-        var groups = GetGroupsExecution(lastMsg.Subject);
+        var groups = GetGroupsExecution(msg.Envelope.Subject);
 
-        var computers = GetCumpotersExecution(lastMsg.Subject);
+        var computers = GetCumpotersExecution(msg.Envelope.Subject);
 
 
         string groupToExecution = String.Empty;
 
         foreach (var item in groups)
         {
-            if (item == _remoteCmdJsonConf.ParamsExecution.GroupExecution)
+            if (item == _Appsettings.ParamsExecution.GroupExecution)
                 groupToExecution = item;
         }
 
@@ -45,15 +44,54 @@ public class Conditions
             }
         }
 
-        var checkedCodeExecution = CheckCodeExecution(codeExecution);
+        // var checkedCodeExecution = CheckCodeExecution(codeExecution);
         var checkGroup = !String.IsNullOrEmpty(groupToExecution);
         var computerToExecute = computerFound;
 
         // Console.WriteLine($"RESULT: {checkedCodeExecution}, {checkGroup}, {computerToExecute}");
+        var _pathJson = new JsonOperations().LoadAppSettingsPathJson("path.json");
+        var _appSettingsJson = new JsonOperations().LoadAppSettingsJson(_pathJson.Path);
 
-        if (checkedCodeExecution && checkGroup && computerToExecute)
+
+        if (uniqueId > _appSettingsJson.ServiceConf.LastExecution)
         {
-            Console.WriteLine(lastMsg.Body.ToString().ToLower().Contains("desligar"));
+
+            if (checkGroup && computerToExecute)
+            {
+                // 
+                var jsonOps = new JsonOperations();
+
+                jsonOps.JsonWriteLastExecution(_pathJson.Path, uniqueId);
+
+                var singleMessage = inbox.GetMessage(msg.Index);
+
+                if (singleMessage.Attachments.Any())
+                {
+                    foreach (var item in singleMessage.Attachments)
+                    {
+                        if (item is MimePart mimePart)
+                        {
+                            var fileName = mimePart.FileName;
+                            // Console.WriteLine(fileName);
+                            var filePath = Path.Combine("attachments\\ScriptsToExecute", fileName);
+
+                            // Salvar o anexo
+                            using (var stream = File.Create(filePath))
+                            {
+                                mimePart.Content.DecodeTo(stream);
+                            }
+                            
+                            Basics.ExecutePowerShellScript($"attachments\\ScriptsToExecute\\{fileName}");
+
+                            Console.WriteLine($"attachment saved in: {filePath}");
+                        }
+                    }
+                }
+                else
+                    Executions.ExecutionsToExecute(singleMessage.Body.ToString());
+
+
+            }
         }
 
 
@@ -98,7 +136,7 @@ public class Conditions
 
     public bool CheckCodeExecution(string code)
     {
-        var codeDecrypted = PasswordManager.Decrypt(_remoteCmdJsonConf.ParamsExecution.SecretExecutionCode);
+        var codeDecrypted = PasswordManager.Decrypt(_Appsettings.ParamsExecution.SecretExecutionCode);
 
         if (code == codeDecrypted)
             return true;
@@ -128,7 +166,7 @@ public class Conditions
                 }
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return false;
         }
