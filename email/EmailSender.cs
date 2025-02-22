@@ -1,15 +1,11 @@
+using System.ComponentModel;
 using System.Net;
 using System.Net.Mail;
 
 public static class EmailSender
 {
-    public static void SendEmail(string to, string subject, string body, string attachmentPath)
+    public static void SendEmail(string to, string subject, string body, string attachmentPath, Appsettings _appSettingsJson)
     {
-        var jsonOps = new JsonOperations();
-
-        var _pathJson = jsonOps.LoadAppSettingsPathJson("path.json");
-
-        var _appSettingsJson = new JsonOperations().LoadAppSettingsJson(_pathJson.Path);
 
         var message = new MailMessage(_appSettingsJson.ServerSmtp.UserName, to, subject, body);
 
@@ -20,16 +16,20 @@ public static class EmailSender
             message.Attachments.Add(attachment);
         }
 
-        SmtpClient SmtpClient = new SmtpClient("smtp.nostopti.com.br")
+        SmtpClient SmtpClient = new SmtpClient(_appSettingsJson.ServerSmtp.Server)
         {
             Port = _appSettingsJson.ServerSmtp.Port,
             Credentials = new NetworkCredential(_appSettingsJson.ServerSmtp.UserName, PasswordManager.Decrypt(_appSettingsJson.ServerSmtp.Password)),
+            EnableSsl = _appSettingsJson.ServerSmtp.UseSsl
         };
         SmtpClient.SendCompleted += (s, e) =>
         {
             SmtpClient.Dispose();
             message.Dispose();
         };
+
+        SmtpClient.SendCompleted += new SendCompletedEventHandler(SendCompletedCallback);
+
         try
         {
             SmtpClient.SendAsync(message, null);
@@ -40,6 +40,27 @@ public static class EmailSender
         }
     }
 
+    private static void SendCompletedCallback(object sender, AsyncCompletedEventArgs e)
+    {
+        // Verificar se houve um erro
+        if (e.Error != null)
+        {
+            Console.WriteLine($"Erro ao enviar email: {e.Error.Message}");
+        }
+        else if (e.Cancelled)
+        {
+            Console.WriteLine("Envio de email cancelado.");
+        }
+        else
+        {
+            Console.WriteLine("Email enviado com sucesso!");
+        }
+
+        // Limpar o objeto SmtpClient e MailMessage
+        ((SmtpClient)sender).Dispose();
+        MailMessage mail = e.UserState as MailMessage;
+        mail?.Dispose();
+    }
 
 
 }

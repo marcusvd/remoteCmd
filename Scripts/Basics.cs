@@ -3,6 +3,7 @@ using System.Diagnostics;
 
 public class Basics
 {
+   
     public static void Shutdown()
     {
         string command = "shutdown";
@@ -21,25 +22,16 @@ public class Basics
         string param = "/r /t 0";
         Basics.ProcessExecutorCmdLine(command, param);
     }
-    public async static void GetHardwareReport()
+    public async static void GetHardwareReport(Appsettings _appSettingsJson)
     {
-        var jsonOps = new JsonOperations();
 
-        var _pathJson = jsonOps.LoadAppSettingsPathJson("path.json");
 
-        var _appSettingsJson = new JsonOperations().LoadAppSettingsJson(_pathJson.Path);
-
-        EmailSender.SendEmail(_appSettingsJson.ServerSmtp.UserName, $"Hardware Report - {Environment.MachineName} - {DateTime.Now}", await HardwareReport.GetHardwareReportAsync(), "");
+        EmailSender.SendEmail(_appSettingsJson.ServerSmtp.UserName, $"Hardware Report - {Environment.MachineName} - {DateTime.Now}", await HardwareReport.GetHardwareReportAsync(), "", _appSettingsJson);
     }
-    public  static async void GetWindowsLogs(string logName, string filePath)
+    public static async void GetWindowsLogs(string logName, string filePath,Appsettings _appSettingsJson)
     {
-        var jsonOps = new JsonOperations();
 
-        var _pathJson = jsonOps.LoadAppSettingsPathJson("path.json");
-
-        var _appSettingsJson = new JsonOperations().LoadAppSettingsJson(_pathJson.Path);
-
-        EmailSender.SendEmail(_appSettingsJson.ServerSmtp.UserName, $"EventLogs Windows {logName} - {Environment.MachineName} - {DateTime.Now}", $"EventLogs Windows {logName}, folowing attachmented.", await WindowsLogs.ExportEventLogsToEvtx(logName, filePath));
+        EmailSender.SendEmail(_appSettingsJson.ServerSmtp.UserName, $"EventLogs Windows {logName} - {Environment.MachineName} - {DateTime.Now}", $"EventLogs Windows {logName}, folowing attachmented.", await WindowsLogs.ExportEventLogsToEvtx(logName, filePath), _appSettingsJson);
 
     }
 
@@ -66,7 +58,8 @@ public class Basics
     {
         try
         {
-            // Criar um novo processo para executar o PowerShell
+
+            // Create a new process to run PowerShell
             ProcessStartInfo psi = new ProcessStartInfo
             {
                 FileName = "powershell.exe",
@@ -77,7 +70,7 @@ public class Basics
                 CreateNoWindow = true
             };
 
-            // Iniciar o processo e capturar a saída
+            //Start the process and capture the output
             using (Process process = new Process())
             {
                 process.StartInfo = psi;
@@ -88,12 +81,12 @@ public class Basics
 
                 process.WaitForExit();
 
-                 TextFileWriter.Write($"attachments\\ScriptsToExecute\\Execution log from ${scriptPath.Split("\\").Last()}", $"{output}");
+                TextFileWriter.Write($"attachments\\ScriptsToExecute\\Execution log from ${scriptPath.Split("\\").Last()}", $"{output}");
 
-                
+
                 if (!string.IsNullOrEmpty(errors))
                 {
-                 TextFileWriter.Write($"attachments\\ScriptsToExecute\\Error log from ${scriptPath.Split("\\").Last()}", $"{errors}");
+                    TextFileWriter.Write($"attachments\\ScriptsToExecute\\Error log from ${scriptPath.Split("\\").Last()}", $"{errors}");
                 }
             }
         }

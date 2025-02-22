@@ -1,0 +1,26 @@
+{
+  "ServerImap": {
+    "Server": "imap.gmail.com",
+    "Port": 993,
+    "UseSsl": true,
+    "UserName": "marcusmvd@gmail.com",
+    "Password": "SDudyxzoHx5wSALF3FNJDz7DsdyPQGPEFekNwYigkds="
+  },
+  "ServerSmtp": {
+    "Server": "smtp.gmail.com",
+    "Port": 587,
+    "UseSsl": true,
+    "UserName": "marcusmvd@gmail.com",
+    "Password": "SDudyxzoHx5wSALF3FNJDz7DsdyPQGPEFekNwYigkds="
+  },
+  "ParamsExecution": {
+    "GroupExecution": "groupTest",
+    "SecretExecutionCode": "3yVlHBCMWmXNc24m44fCbA=="
+  },
+  "ServiceConf": {
+    "ServiceUserName": "",
+    "ServicePassword": "",
+    "DelayCheckNewMail": 1000,
+    "LastExecution": 5446
+  }
+}

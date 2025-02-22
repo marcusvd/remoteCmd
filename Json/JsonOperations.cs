@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text.Json;
 
 
@@ -7,7 +8,7 @@ public class JsonOperations
     private Appsettings? _Appsettings;
     public JsonOperations()
     {
-        _Appsettings = null;
+
     }
     public JsonOperations(
         Appsettings Appsettings
@@ -50,13 +51,17 @@ public class JsonOperations
             appSettings = JsonSerializer.Deserialize<Appsettings>(jsonfile);
 
             if (appSettings != null)
+            {
+                EventLog.WriteEntry("MyService", appSettings.ServerSmtp.UserName, EventLogEntryType.Information);
                 return appSettings;
+            }
 
         }
 
         catch (Exception ex)
         {
             Console.WriteLine($"Error when load file JSON: {ex.Message}", "Error");
+            EventLog.WriteEntry("MyService", ex.ToString(), EventLogEntryType.Error);
         }
 
         return new Appsettings();

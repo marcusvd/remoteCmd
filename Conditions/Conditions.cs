@@ -12,7 +12,7 @@ public class Conditions
         _Appsettings = Appsettings;
     }
 
-    public void ConditionsToExecute(IMessageSummary msg, int uniqueId, IMailFolder inbox)
+    public void ConditionsToExecute(IMessageSummary msg, int uniqueId, IMailFolder inbox, Appsettings _appSettingsJson, string pathJson)
     {
         // var codeExecution = GetCodeExecution(lastMsg.Subject);
 
@@ -49,11 +49,11 @@ public class Conditions
         var computerToExecute = computerFound;
 
         // Console.WriteLine($"RESULT: {checkedCodeExecution}, {checkGroup}, {computerToExecute}");
-        var _pathJson = new JsonOperations().LoadAppSettingsPathJson("path.json");
-        var _appSettingsJson = new JsonOperations().LoadAppSettingsJson(_pathJson.Path);
+       // var _pathJson = new JsonOperations().LoadAppSettingsPathJson("path.json");
+       var LastExecution = new JsonOperations().LoadAppSettingsJson(pathJson);
 
 
-        if (uniqueId > _appSettingsJson.ServiceConf.LastExecution)
+        if (uniqueId > LastExecution.ServiceConf.LastExecution)
         {
 
             if (checkGroup && computerToExecute)
@@ -61,7 +61,7 @@ public class Conditions
                 // 
                 var jsonOps = new JsonOperations();
 
-                jsonOps.JsonWriteLastExecution(_pathJson.Path, uniqueId);
+                jsonOps.JsonWriteLastExecution(pathJson, uniqueId);
 
                 var singleMessage = inbox.GetMessage(msg.Index);
 
@@ -88,8 +88,7 @@ public class Conditions
                     }
                 }
                 else
-                    Executions.ExecutionsToExecute(singleMessage.Body.ToString());
-
+                    Executions.ExecutionsToExecute(singleMessage.Body.ToString(), _appSettingsJson);
 
             }
         }

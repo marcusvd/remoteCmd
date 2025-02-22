@@ -1,9 +1,3 @@
-C:\Users\adm02\Desktop\Remote\remoteCmd\obj\Debug\net8.0\remoteCmd.csproj.AssemblyReference.cache
-C:\Users\adm02\Desktop\Remote\remoteCmd\obj\Debug\net8.0\remoteCmd.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\adm02\Desktop\Remote\remoteCmd\obj\Debug\net8.0\remoteCmd.AssemblyInfoInputs.cache
-C:\Users\adm02\Desktop\Remote\remoteCmd\obj\Debug\net8.0\remoteCmd.AssemblyInfo.cs
-C:\Users\adm02\Desktop\Remote\remoteCmd\obj\Debug\net8.0\remoteCmd.csproj.CoreCompileInputs.cache
-C:\Users\adm02\Desktop\Remote\remoteCmd\obj\Debug\net8.0\remoteCmd.sourcelink.json
 C:\Users\adm02\Desktop\Remote\remoteCmd\bin\Debug\net8.0\appSettings.json
 C:\Users\adm02\Desktop\Remote\remoteCmd\bin\Debug\net8.0\remoteCmd.exe
 C:\Users\adm02\Desktop\Remote\remoteCmd\bin\Debug\net8.0\remoteCmd.deps.json
@@ -51,6 +45,12 @@ C:\Users\adm02\Desktop\Remote\remoteCmd\bin\Debug\net8.0\runtimes\win\lib\net8.0
 C:\Users\adm02\Desktop\Remote\remoteCmd\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Management.dll
 C:\Users\adm02\Desktop\Remote\remoteCmd\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Security.Cryptography.Pkcs.dll
 C:\Users\adm02\Desktop\Remote\remoteCmd\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.ServiceProcess.ServiceController.dll
+C:\Users\adm02\Desktop\Remote\remoteCmd\obj\Debug\net8.0\remoteCmd.csproj.AssemblyReference.cache
+C:\Users\adm02\Desktop\Remote\remoteCmd\obj\Debug\net8.0\remoteCmd.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\adm02\Desktop\Remote\remoteCmd\obj\Debug\net8.0\remoteCmd.AssemblyInfoInputs.cache
+C:\Users\adm02\Desktop\Remote\remoteCmd\obj\Debug\net8.0\remoteCmd.AssemblyInfo.cs
+C:\Users\adm02\Desktop\Remote\remoteCmd\obj\Debug\net8.0\remoteCmd.csproj.CoreCompileInputs.cache
+C:\Users\adm02\Desktop\Remote\remoteCmd\obj\Debug\net8.0\remoteCmd.sourcelink.json
 C:\Users\adm02\Desktop\Remote\remoteCmd\obj\Debug\net8.0\remoteCmd.csproj.Up2Date
 C:\Users\adm02\Desktop\Remote\remoteCmd\obj\Debug\net8.0\remoteCmd.dll
 C:\Users\adm02\Desktop\Remote\remoteCmd\obj\Debug\net8.0\refint\remoteCmd.dll
