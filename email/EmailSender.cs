@@ -4,7 +4,7 @@ using System.Net.Mail;
 
 public static class EmailSender
 {
-    public static void SendEmail(string to, string subject, string body, string attachmentPath, Appsettings _appSettingsJson)
+    public static void SendEmail(string to, string subject, string body, string attachmentPath, AppSettings _appSettingsJson)
     {
 
         var message = new MailMessage(_appSettingsJson.ServerSmtp.UserName, to, subject, body);

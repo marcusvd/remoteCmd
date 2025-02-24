@@ -5,16 +5,16 @@ using System.Text.Json;
 
 public class JsonOperations
 {
-    private Appsettings? _Appsettings;
+    private AppSettings? _AppSettings;
     public JsonOperations()
     {
 
     }
     public JsonOperations(
-        Appsettings Appsettings
+        AppSettings AppSettings
         )
     {
-        _Appsettings = Appsettings;
+        _AppSettings = AppSettings;
     }
 
 
@@ -27,7 +27,7 @@ public class JsonOperations
             WriteIndented = true
         };
 
-        string json = JsonSerializer.Serialize(_Appsettings, options);
+        string json = JsonSerializer.Serialize(_AppSettings, options);
         string nameFileToSave = "appSettings.json";
 
         try
@@ -42,13 +42,13 @@ public class JsonOperations
         Console.WriteLine(json);
     }
 
-    public Appsettings LoadAppSettingsJson(string pathJsonFile)
+    public AppSettings LoadAppSettingsJson(string pathJsonFile)
     {
         try
         {
             string jsonfile = File.ReadAllText(pathJsonFile);
-            var appSettings = new Appsettings();
-            appSettings = JsonSerializer.Deserialize<Appsettings>(jsonfile);
+            var appSettings = new AppSettings();
+            appSettings = JsonSerializer.Deserialize<AppSettings>(jsonfile);
 
             if (appSettings != null)
             {
@@ -64,7 +64,7 @@ public class JsonOperations
             EventLog.WriteEntry("MyService", ex.ToString(), EventLogEntryType.Error);
         }
 
-        return new Appsettings();
+        return new AppSettings();
     }
 
     public AppSettingsPath LoadAppSettingsPathJson(string pathJsonFile)
@@ -111,7 +111,7 @@ public class JsonOperations
         try
         {
             // Desserializar JSON existente
-            var appSettings = JsonSerializer.Deserialize<Appsettings>(json) ?? new Appsettings();
+            var appSettings = JsonSerializer.Deserialize<AppSettings>(json) ?? new AppSettings();
 
             // Atualizar propriedade desejada
             appSettings.ServiceConf.LastExecution = uniqueId;

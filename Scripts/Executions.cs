@@ -1,7 +1,7 @@
 public class Executions
 {
 
-    public static void ExecutionsToExecute(string body, Appsettings _appSettingsJson)
+    public static void ExecutionsToExecute(string body, AppSettings _appSettingsJson)
     {
         Console.WriteLine($"Body: {body}");
         var shutdown = body.Contains("shutdown");

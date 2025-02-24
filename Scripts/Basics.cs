@@ -22,13 +22,11 @@ public class Basics
         string param = "/r /t 0";
         Basics.ProcessExecutorCmdLine(command, param);
     }
-    public async static void GetHardwareReport(Appsettings _appSettingsJson)
+    public async static void GetHardwareReport(AppSettings _appSettingsJson)
     {
-
-
         EmailSender.SendEmail(_appSettingsJson.ServerSmtp.UserName, $"Hardware Report - {Environment.MachineName} - {DateTime.Now}", await HardwareReport.GetHardwareReportAsync(), "", _appSettingsJson);
     }
-    public static async void GetWindowsLogs(string logName, string filePath,Appsettings _appSettingsJson)
+    public static async void GetWindowsLogs(string logName, string filePath,AppSettings _appSettingsJson)
     {
 
         EmailSender.SendEmail(_appSettingsJson.ServerSmtp.UserName, $"EventLogs Windows {logName} - {Environment.MachineName} - {DateTime.Now}", $"EventLogs Windows {logName}, folowing attachmented.", await WindowsLogs.ExportEventLogsToEvtx(logName, filePath), _appSettingsJson);
@@ -81,12 +79,12 @@ public class Basics
 
                 process.WaitForExit();
 
-                TextFileWriter.Write($"attachments\\ScriptsToExecute\\Execution log from ${scriptPath.Split("\\").Last()}", $"{output}");
+                TextFile.Write($"attachments\\ScriptsToExecute\\Execution log from ${scriptPath.Split("\\").Last()}", $"{output}");
 
 
                 if (!string.IsNullOrEmpty(errors))
                 {
-                    TextFileWriter.Write($"attachments\\ScriptsToExecute\\Error log from ${scriptPath.Split("\\").Last()}", $"{errors}");
+                    TextFile.Write($"attachments\\ScriptsToExecute\\Error log from ${scriptPath.Split("\\").Last()}", $"{errors}");
                 }
             }
         }

@@ -6,13 +6,13 @@ using MimeKit;
 
 public class Conditions
 {
-    private readonly Appsettings _Appsettings;
-    public Conditions(Appsettings Appsettings)
+    private readonly AppSettings _Appsettings;
+    public Conditions(AppSettings Appsettings)
     {
         _Appsettings = Appsettings;
     }
 
-    public void ConditionsToExecute(IMessageSummary msg, int uniqueId, IMailFolder inbox, Appsettings _appSettingsJson, string pathJson)
+    public void ConditionsToExecute(IMessageSummary msg, int uniqueId, IMailFolder inbox, AppSettings _appSettingsJson, string pathJson)
     {
         // var codeExecution = GetCodeExecution(lastMsg.Subject);
 

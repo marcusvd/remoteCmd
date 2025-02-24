@@ -1,4 +1,4 @@
-public class Appsettings
+public class AppSettings
 {
     //Server Conf
     public ServerImap ServerImap { get; set; } = new ServerImap();

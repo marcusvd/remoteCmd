@@ -1,10 +1,15 @@
-public static class TextFileWriter
+
+public static class BasePath
 {
-    public static void Write(string path, string text)
+    public static string Path { get; set; } = AppDomain.CurrentDomain.BaseDirectory;
+}
+public static class TextFile
+{
+    public static void Write(string path, string text, bool append = false)
     {
         try
         {
-            using (StreamWriter streamWriter = new StreamWriter(path))
+            using (StreamWriter streamWriter = new StreamWriter(path, append))
             {
                 streamWriter.Write(text);
             }
@@ -15,4 +20,33 @@ public static class TextFileWriter
         }
 
     }
+}
+
+public static class FolderPathManager
+{
+    public static bool isFolderExists(string path)
+    {
+      
+            if (Directory.Exists(path))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+    }
+
+    public static string CreateFolder(string path)
+    {
+        if (!isFolderExists(path))
+        {
+            var created = Directory.CreateDirectory(path);
+            return created.FullName;
+        }
+
+        return path;
+
+    }
+
 }

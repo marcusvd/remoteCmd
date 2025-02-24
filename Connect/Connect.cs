@@ -6,26 +6,28 @@ using MailKit.Net.Imap;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Win32;
 
 public class Connect : BackgroundService
 {
 
     private readonly ILogger<Connect> _logger;
-    private readonly AppSettingsPath _pathJson;
+    private readonly AppSettings _appSettings;
+    public static string _pathJson = RegistryGetSet.GetRegistryValue(Registry.LocalMachine, "SOFTWARE\\RemoteCmd", "AppSettingsJson");
 
 
     // public Worker(ILogger<Worker> logger, IConfiguration consiguration)
     public Connect(ILogger<Connect> logger, IConfiguration configuration)
     {
         _logger = logger;
-        _pathJson = configuration.Get<AppSettingsPath>() ?? new AppSettingsPath();
 
+        _appSettings = configuration.Get<AppSettings>();
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        var jsonOps = new JsonOperations();
-        var _appSettings = jsonOps.LoadAppSettingsJson(_pathJson.Path);
+        // var jsonOps = new JsonOperations();
+        // var _appSettings = jsonOps.LoadAppSettingsJson(_pathJson.Path);
 
         // var pathJsonPath2 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, _pathJson.Path);
         // var _appSettingsJson = new JsonOperations().LoadAppSettingsJson(pathJsonPath2);
@@ -76,7 +78,9 @@ public class Connect : BackgroundService
 
                             var uniqueIdToString = firstFilter.Last().UniqueId.ToString();
 
-                            Cond.ConditionsToExecute(firstFilter.Last(), int.Parse(uniqueIdToString), inbox, _appSettings, _pathJson.Path);
+                            
+
+                            Cond.ConditionsToExecute(firstFilter.Last(), int.Parse(uniqueIdToString), inbox, _appSettings, _pathJson);
                         }
                         else
                             Console.WriteLine("Inbox is empty.");
@@ -89,19 +93,19 @@ public class Connect : BackgroundService
                     //disconnect from the server
                     await client.DisconnectAsync(true, stoppingToken);
                     _logger.LogInformation("Disconnected from {server} successfully!", _appSettings.ServerImap.Server);
-                    TextFileWriter.Write("ServiceError.txt", "");
+                    TextFile.Write("ServiceError.txt", "");
                 }
             }
             catch (System.Net.Sockets.SocketException ex)
             {
                 _logger.LogError(ex, "Error checking new messages");
-                TextFileWriter.Write("ServiceError.txt", "Error connecting to server: Incorrect port, authentication type or imap address.");
+                TextFile.Write("ServiceError.txt", "Error connecting to server: Incorrect port, authentication type or imap address.");
                 Console.WriteLine(ex.Message);
 
             }
             catch (MailKit.Security.AuthenticationException ex)
             {
-                TextFileWriter.Write("ServiceError.txt", "Incorrect username or password.");
+                TextFile.Write("ServiceError.txt", "Incorrect username or password.");
                 Console.WriteLine(ex.Message);
             }
             await Task.Delay(_appSettings.ServiceConf.DelayCheckNewMail, stoppingToken);
