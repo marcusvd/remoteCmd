@@ -1,38 +1,40 @@
+
 public class Executions
 {
-
-    public static void ExecutionsToExecute(string body, AppSettings _appSettingsJson)
+    public static void ExecutionsToExecute(string body, AppSettings _appSettings)
     {
         Console.WriteLine($"Body: {body}");
+
         var shutdown = body.Contains("shutdown");
         if (shutdown)
-            Basics.Shutdown();
+            Basics.Shutdown(_appSettings);
 
         var logoff = body.Contains("logoff");
         if (logoff)
-            Basics.Logoff();
+            Basics.Logoff(_appSettings);
 
         var reboot = body.Contains("reboot");
         if (reboot)
-            Basics.Reboot();
+            Basics.Reboot(_appSettings);
+       
+        var getIpAll = body.Contains("getIpAll");
+        if (getIpAll)
+            Basics.GetIpAll(_appSettings);
 
         var hardware = body.Contains("hardware");
         if (hardware)
-            Basics.GetHardwareReport(_appSettingsJson);
+            Basics.GetHardwareReport(_appSettings);
 
-        // Specify the event log to export (example: "Application", "System", "Security")
-        // Specify the path and file name where the logs will be save
         var eventLogsApplication = body.Contains("EventLogs(Application)");
-
         if (eventLogsApplication)
-            Basics.GetWindowsLogs("Application", $"attachments\\WindowsLogs\\Application.evtx", _appSettingsJson);
+            Basics.GetWindowsLogs("Application", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "attachments\\WindowsLogs\\Application.evtx"), _appSettings);
 
         var eventLogsSystem = body.Contains("EventLogs(System)");
         if (eventLogsSystem)
-            Basics.GetWindowsLogs("System", $"attachments\\WindowsLogs\\System.evtx", _appSettingsJson);
+            Basics.GetWindowsLogs("System", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "attachments\\WindowsLogs\\System.evtx"), _appSettings);
 
         var eventLogsSecurity = body.Contains("EventLogs(Security)");
         if (eventLogsSecurity)
-            Basics.GetWindowsLogs("Security", $"attachments\\WindowsLogs\\Security.evtx", _appSettingsJson);
+            Basics.GetWindowsLogs("Security", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "attachments\\WindowsLogs\\Security.evtx"), _appSettings);
     }
 }

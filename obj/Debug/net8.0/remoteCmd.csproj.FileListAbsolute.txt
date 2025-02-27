@@ -45,6 +45,8 @@ C:\Users\adm02\Desktop\Remote\remoteCmd\bin\Debug\net8.0\runtimes\win\lib\net8.0
 C:\Users\adm02\Desktop\Remote\remoteCmd\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Management.dll
 C:\Users\adm02\Desktop\Remote\remoteCmd\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Security.Cryptography.Pkcs.dll
 C:\Users\adm02\Desktop\Remote\remoteCmd\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.ServiceProcess.ServiceController.dll
+C:\Users\adm02\Desktop\Remote\remoteCmd\bin\Debug\net8.0\PasswordManagement.dll
+C:\Users\adm02\Desktop\Remote\remoteCmd\bin\Debug\net8.0\RegistryManagement.dll
 C:\Users\adm02\Desktop\Remote\remoteCmd\obj\Debug\net8.0\remoteCmd.csproj.AssemblyReference.cache
 C:\Users\adm02\Desktop\Remote\remoteCmd\obj\Debug\net8.0\remoteCmd.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\adm02\Desktop\Remote\remoteCmd\obj\Debug\net8.0\remoteCmd.AssemblyInfoInputs.cache

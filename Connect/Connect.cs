@@ -7,13 +7,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
+using PasswordManagement;
+using RegistryManagement;
 
 public class Connect : BackgroundService
 {
 
     private readonly ILogger<Connect> _logger;
     private readonly AppSettings _appSettings;
-    public static string _pathJson = RegistryGetSet.GetRegistryValue(Registry.LocalMachine, "SOFTWARE\\RemoteCmd", "AppSettingsJson");
+    public static string _pathJson = RegistryOperations.GetRegistryValue(Registry.LocalMachine, "SOFTWARE\\RemoteCmd", "AppSettingsJson");
 
 
     // public Worker(ILogger<Worker> logger, IConfiguration consiguration)
@@ -21,26 +23,12 @@ public class Connect : BackgroundService
     {
         _logger = logger;
 
-        _appSettings = configuration.Get<AppSettings>();
+        _appSettings = configuration.Get<AppSettings>() ?? new AppSettings();
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        // var jsonOps = new JsonOperations();
-        // var _appSettings = jsonOps.LoadAppSettingsJson(_pathJson.Path);
-
-        // var pathJsonPath2 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, _pathJson.Path);
-        // var _appSettingsJson = new JsonOperations().LoadAppSettingsJson(pathJsonPath2);
-
-        EventLog.WriteEntry("MyService", _appSettings.ServerImap.Server, EventLogEntryType.Error);
-        // Console.WriteLine(_appSettingsJson.ServerImap.UserName);
-
-
-
-        // EmailSender.SendEmail(_appSettingsJson.ServerSmtp.UserName, $"Hardware Report - {Environment.MachineName} - {DateTime.Now}", await HardwareReport.GetHardwareReportAsync(), "");
-        // await HardwareReport.GetHardwareReportAsync();
-
-
+       
         while (!stoppingToken.IsCancellationRequested)
         {
             _logger.LogInformation("Checking new messages at: {time}", DateTime.Now);
@@ -78,8 +66,6 @@ public class Connect : BackgroundService
 
                             var uniqueIdToString = firstFilter.Last().UniqueId.ToString();
 
-                            
-
                             Cond.ConditionsToExecute(firstFilter.Last(), int.Parse(uniqueIdToString), inbox, _appSettings, _pathJson);
                         }
                         else
@@ -93,19 +79,19 @@ public class Connect : BackgroundService
                     //disconnect from the server
                     await client.DisconnectAsync(true, stoppingToken);
                     _logger.LogInformation("Disconnected from {server} successfully!", _appSettings.ServerImap.Server);
-                    TextFile.Write("ServiceError.txt", "");
+                    // TextFile.Write("ServiceError.txt", "");
                 }
             }
             catch (System.Net.Sockets.SocketException ex)
             {
                 _logger.LogError(ex, "Error checking new messages");
-                TextFile.Write("ServiceError.txt", "Error connecting to server: Incorrect port, authentication type or imap address.");
+                // TextFile.Write("ServiceError.txt", "Error connecting to server: Incorrect port, authentication type or imap address.");
                 Console.WriteLine(ex.Message);
 
             }
             catch (MailKit.Security.AuthenticationException ex)
             {
-                TextFile.Write("ServiceError.txt", "Incorrect username or password.");
+                // TextFile.Write("ServiceError.txt", "Incorrect username or password.");
                 Console.WriteLine(ex.Message);
             }
             await Task.Delay(_appSettings.ServiceConf.DelayCheckNewMail, stoppingToken);

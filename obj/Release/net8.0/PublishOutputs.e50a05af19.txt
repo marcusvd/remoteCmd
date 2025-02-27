@@ -45,3 +45,5 @@ C:\Users\adm02\Desktop\Remote\remoteCmd\compiled\runtimes\win\lib\net8.0\System.
 C:\Users\adm02\Desktop\Remote\remoteCmd\compiled\runtimes\win\lib\net8.0\System.Management.dll
 C:\Users\adm02\Desktop\Remote\remoteCmd\compiled\runtimes\win\lib\net7.0\System.Security.Cryptography.Pkcs.dll
 C:\Users\adm02\Desktop\Remote\remoteCmd\compiled\runtimes\win\lib\net8.0\System.ServiceProcess.ServiceController.dll
+C:\Users\adm02\Desktop\Remote\remoteCmd\compiled\PasswordManagement.dll
+C:\Users\adm02\Desktop\Remote\remoteCmd\compiled\RegistryManagement.dll

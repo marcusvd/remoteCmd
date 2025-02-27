@@ -120,6 +120,7 @@ public class HardwareReport
 
             foreach (var obj in results)
             {
+
                 info.AppendLine($"Name: {obj["Name"]}");
                 info.AppendLine($"NumberOfCores: {obj["NumberOfCores"]}");
 
@@ -127,6 +128,7 @@ public class HardwareReport
                 double maxClockSpeedGHz = Math.Round(maxClockSpeedMHz / 1000.0, 2);
                 info.AppendLine($"MaxClockSpeed: {maxClockSpeedGHz} GHz");
                 info.AppendLine(new string('-', 50));
+
             }
         }
         catch (Exception ex)

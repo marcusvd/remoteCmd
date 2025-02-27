@@ -9,10 +9,11 @@
       "remoteCmd/1.0.0": {
         "dependencies": {
           "MailKit": "4.3.0",
-          "Microsoft.Extensions.Configuration.Json": "8.0.0",
           "Microsoft.Extensions.Hosting": "8.0.0",
           "Microsoft.Extensions.Hosting.WindowsServices": "8.0.0",
-          "System.Management": "8.0.0"
+          "System.Management": "8.0.0",
+          "PasswordManagement": "1.0.0.0",
+          "RegistryManagement": "1.0.0.0"
         },
         "runtime": {
           "remoteCmd.dll": {}
@@ -523,6 +524,22 @@
         "dependencies": {
           "System.Text.Encodings.Web": "8.0.0"
         }
+      },
+      "PasswordManagement/1.0.0.0": {
+        "runtime": {
+          "PasswordManagement.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "RegistryManagement/1.0.0.0": {
+        "runtime": {
+          "RegistryManagement.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
       }
     }
   },
@@ -825,6 +842,16 @@
       "sha512": "sha512-OdrZO2WjkiEG6ajEFRABTRCi/wuXQPxeV6g8xvUJqdxMvvuCCEk86zPla8UiIQJz3durtUEbNyY/3lIhS0yZvQ==",
       "path": "system.text.json/8.0.0",
       "hashPath": "system.text.json.8.0.0.nupkg.sha512"
+    },
+    "PasswordManagement/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "RegistryManagement/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }

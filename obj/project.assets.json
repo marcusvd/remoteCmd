@@ -2302,7 +2302,6 @@
   "projectFileDependencyGroups": {
     "net8.0": [
       "MailKit >= 4.3.0",
-      "Microsoft.Extensions.Configuration.Json >= 8.0.0",
       "Microsoft.Extensions.Hosting >= 8.0.0",
       "Microsoft.Extensions.Hosting.WindowsServices >= 8.0.0",
       "System.Management >= 8.0.0"
@@ -2361,10 +2360,6 @@
           "MailKit": {
             "target": "Package",
             "version": "[4.3.0, )"
-          },
-          "Microsoft.Extensions.Configuration.Json": {
-            "target": "Package",
-            "version": "[8.0.0, )"
           },
           "Microsoft.Extensions.Hosting": {
             "target": "Package",

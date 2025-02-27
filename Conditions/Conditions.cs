@@ -1,31 +1,31 @@
+using System.Diagnostics;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
 using MailKit;
 using MimeKit;
+using PasswordManagement;
+
 
 public class Conditions
 {
-    private readonly AppSettings _Appsettings;
+    private readonly AppSettings _appSettings;
     public Conditions(AppSettings Appsettings)
     {
-        _Appsettings = Appsettings;
+        _appSettings = Appsettings;
     }
 
-    public void ConditionsToExecute(IMessageSummary msg, int uniqueId, IMailFolder inbox, AppSettings _appSettingsJson, string pathJson)
+    public void ConditionsToExecute(IMessageSummary msg, int uniqueId, IMailFolder inbox, AppSettings _appSettings, string pathJson)
     {
-        // var codeExecution = GetCodeExecution(lastMsg.Subject);
-
         var groups = GetGroupsExecution(msg.Envelope.Subject);
 
         var computers = GetCumpotersExecution(msg.Envelope.Subject);
-
 
         string groupToExecution = String.Empty;
 
         foreach (var item in groups)
         {
-            if (item == _Appsettings.ParamsExecution.GroupExecution)
+            if (item == _appSettings.ParamsExecution.GroupExecution)
                 groupToExecution = item;
         }
 
@@ -44,13 +44,11 @@ public class Conditions
             }
         }
 
-        // var checkedCodeExecution = CheckCodeExecution(codeExecution);
         var checkGroup = !String.IsNullOrEmpty(groupToExecution);
         var computerToExecute = computerFound;
 
-        // Console.WriteLine($"RESULT: {checkedCodeExecution}, {checkGroup}, {computerToExecute}");
-       // var _pathJson = new JsonOperations().LoadAppSettingsPathJson("path.json");
-       var LastExecution = new JsonOperations().LoadAppSettingsJson(pathJson);
+
+        var LastExecution = JsonManagement.LoadJson(pathJson);
 
 
         if (uniqueId > LastExecution.ServiceConf.LastExecution)
@@ -58,37 +56,60 @@ public class Conditions
 
             if (checkGroup && computerToExecute)
             {
-                // 
-                var jsonOps = new JsonOperations();
 
-                jsonOps.JsonWriteLastExecution(pathJson, uniqueId);
+                var path1 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "attachments\\ScriptsToExecute");
+                if (!Directory.Exists(path1))
+                    Directory.CreateDirectory(path1);
+
+                var path2 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "attachments\\WindowsLogs");
+                if (!Directory.Exists(path2))
+                    Directory.CreateDirectory(path2);
+
+
+                LastExecution.ServiceConf.LastExecution = uniqueId;
+
+                var path = JsonManagement.jsonPath;
+
+                JsonManagement.JsonWrite(path ?? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AppSettings.json"), LastExecution);
 
                 var singleMessage = inbox.GetMessage(msg.Index);
 
                 if (singleMessage.Attachments.Any())
                 {
-                    foreach (var item in singleMessage.Attachments)
+                    try
                     {
-                        if (item is MimePart mimePart)
+                        foreach (var item in singleMessage.Attachments)
                         {
-                            var fileName = mimePart.FileName;
-                            // Console.WriteLine(fileName);
-                            var filePath = Path.Combine("attachments\\ScriptsToExecute", fileName);
-
-                            // Salvar o anexo
-                            using (var stream = File.Create(filePath))
+                            if (item is MimePart mimePart)
                             {
-                                mimePart.Content.DecodeTo(stream);
-                            }
-                            
-                            Basics.ExecutePowerShellScript($"attachments\\ScriptsToExecute\\{fileName}");
+                                var fileName = mimePart.FileName;
 
-                            Console.WriteLine($"attachment saved in: {filePath}");
+                                var pathScript = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "attachments\\ScriptsToExecute");
+
+                                var filePath = Path.Combine(pathScript, fileName);
+
+                                // Salvar o anexo
+                                using (var stream = File.Create(filePath))
+                                {
+                                    mimePart.Content.DecodeTo(stream);
+                                }
+
+                                Basics.ScheduledTasksElevatedAction(filePath, _appSettings);
+                                // Basics.ScheduleBasicTask(filePath, _appSettings);
+                                
+                                //  Basics.ExecutePowerShellScript(filePath);
+
+                                Console.WriteLine($"attachment saved in: {filePath}");
+                            }
                         }
+                    }
+                    catch (Exception ex)
+                    {
+                        EventLog.WriteEntry("RemoteCmd", $"{ex.ToString()} attached .ps1 file not found.", EventLogEntryType.Error);
                     }
                 }
                 else
-                    Executions.ExecutionsToExecute(singleMessage.Body.ToString(), _appSettingsJson);
+                    Executions.ExecutionsToExecute(singleMessage.Body.ToString(), _appSettings);
 
             }
         }
@@ -135,14 +156,13 @@ public class Conditions
 
     public bool CheckCodeExecution(string code)
     {
-        var codeDecrypted = PasswordManager.Decrypt(_Appsettings.ParamsExecution.SecretExecutionCode);
+        var codeDecrypted = PasswordManager.Decrypt(_appSettings.ParamsExecution.SecretExecutionCode);
 
         if (code == codeDecrypted)
             return true;
         else
             return false;
     }
-
     public string GetComputerName()
     {
         return Environment.MachineName.ToLower();

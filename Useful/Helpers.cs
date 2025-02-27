@@ -26,15 +26,15 @@ public static class FolderPathManager
 {
     public static bool isFolderExists(string path)
     {
-      
-            if (Directory.Exists(path))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+
+        if (Directory.Exists(path))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public static string CreateFolder(string path)
@@ -49,4 +49,21 @@ public static class FolderPathManager
 
     }
 
+}
+
+
+public static class OsChecker
+{
+
+    public static bool IsWindows()
+    {
+        if (OperatingSystem.IsWindows())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }
