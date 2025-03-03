@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Mail;
 using PasswordManagement;
 
-public static class EmailSender
+public static class Sender
 {
     public static void SendEmail(string to, string subject, string body, string attachmentPath, AppSettings _appSettingsJson)
     {

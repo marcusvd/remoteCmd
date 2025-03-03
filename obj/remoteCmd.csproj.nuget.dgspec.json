@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\adm02\\Desktop\\Remote\\remoteCmd\\remoteCmd.csproj": {}
+    "C:\\Users\\adm02\\Desktop\\Remote\\remotecmd\\remoteCmd.csproj": {}
   },
   "projects": {
-    "C:\\Users\\adm02\\Desktop\\Remote\\remoteCmd\\remoteCmd.csproj": {
+    "C:\\Users\\adm02\\Desktop\\Remote\\remotecmd\\remoteCmd.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\adm02\\Desktop\\Remote\\remoteCmd\\remoteCmd.csproj",
+        "projectUniqueName": "C:\\Users\\adm02\\Desktop\\Remote\\remotecmd\\remoteCmd.csproj",
         "projectName": "remoteCmd",
-        "projectPath": "C:\\Users\\adm02\\Desktop\\Remote\\remoteCmd\\remoteCmd.csproj",
+        "projectPath": "C:\\Users\\adm02\\Desktop\\Remote\\remotecmd\\remoteCmd.csproj",
         "packagesPath": "C:\\Users\\adm02\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\adm02\\Desktop\\Remote\\remoteCmd\\obj\\",
+        "outputPath": "C:\\Users\\adm02\\Desktop\\Remote\\remotecmd\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

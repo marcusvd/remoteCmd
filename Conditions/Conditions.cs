@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
+using System.Web;
 using MailKit;
 using MimeKit;
 using PasswordManagement;
@@ -57,15 +58,6 @@ public class Conditions
             if (checkGroup && computerToExecute)
             {
 
-                var path1 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "attachments\\ScriptsToExecute");
-                if (!Directory.Exists(path1))
-                    Directory.CreateDirectory(path1);
-
-                var path2 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "attachments\\WindowsLogs");
-                if (!Directory.Exists(path2))
-                    Directory.CreateDirectory(path2);
-
-
                 LastExecution.ServiceConf.LastExecution = uniqueId;
 
                 var path = JsonManagement.jsonPath;
@@ -74,46 +66,29 @@ public class Conditions
 
                 var singleMessage = inbox.GetMessage(msg.Index);
 
+                CallToExecute call = new CallToExecute(_appSettings, singleMessage);
+
                 if (singleMessage.Attachments.Any())
+                    call.ScriptAttachmentsToExecute();
+                else
                 {
-                    try
+                    Executions.ActionPreDefinedsToExecute(singleMessage.Body.ToString(), _appSettings);
+
+
+                    // TextFile.ScriptModify(filePath, TextFile.LogResultActionReturnEmail);
+
+                    if (singleMessage.Body.ToString().Contains("PowershellScriptRun"))
                     {
-                        foreach (var item in singleMessage.Attachments)
-                        {
-                            if (item is MimePart mimePart)
-                            {
-                                var fileName = mimePart.FileName;
+                        //Console.WriteLine($"Advanced Elevated Execution - was received. Script {filePath} will execute in the next reboot.");
+                        //EventLog.WriteEntry("RemoteCmd", $"Advanced Elevated Execution - was received. Script {filePath} will execute in the next reboot.", EventLogEntryType.Information);
 
-                                var pathScript = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "attachments\\ScriptsToExecute");
+                        var command = HttpUtility.HtmlDecode(singleMessage.Body.ToString()).Split('|')[1];
 
-                                var filePath = Path.Combine(pathScript, fileName);
-
-                                // Salvar o anexo
-                                using (var stream = File.Create(filePath))
-                                {
-                                    mimePart.Content.DecodeTo(stream);
-                                }
-
-                                Basics.ScheduledTasksElevatedAction(filePath, _appSettings);
-                                // Basics.ScheduleBasicTask(filePath, _appSettings);
-                                
-                                //  Basics.ExecutePowerShellScript(filePath);
-
-                                Console.WriteLine($"attachment saved in: {filePath}");
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        EventLog.WriteEntry("RemoteCmd", $"{ex.ToString()} attached .ps1 file not found.", EventLogEntryType.Error);
+                        Basics.PowershellScriptRun(command, _appSettings);
                     }
                 }
-                else
-                    Executions.ExecutionsToExecute(singleMessage.Body.ToString(), _appSettings);
-
             }
         }
-
 
     }
 

@@ -1,7 +1,7 @@
 
 public class Executions
 {
-    public static void ExecutionsToExecute(string body, AppSettings _appSettings)
+    public static void ActionPreDefinedsToExecute(string body, AppSettings _appSettings)
     {
         Console.WriteLine($"Body: {body}");
 

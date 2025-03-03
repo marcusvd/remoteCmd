@@ -1,54 +1,64 @@
-// using System.Diagnostics;
-// using Microsoft.Extensions.Logging;
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Text;
 
-// public class test
-// {
+public static class ScriptUtility
+{
+    public static void ScriptModifyAddLogEmailReturn(string path)
+    {
+        try
+        {
+            string[] existingContent = ReadExistingContent(path);
+            string scriptContent = BuildScriptContent(existingContent);
 
-//     public void TestRun(ILogger<Connect> _logger)
-//     {
+            WriteScriptContent(path, scriptContent);
+        }
+        catch (Exception ex)
+        {
+            LogError(ex);
+        }
+    }
 
-//         _logger.LogInformation("ExecuteAsync iniciado");
+    private static string[] ReadExistingContent(string path)
+    {
+        return File.Exists(path) ? File.ReadAllLines(path) : Array.Empty<string>();
+    }
 
-//         try
-//         {
-//             _logger.LogInformation("Criando instância de JsonOperations");
-//             var jsonOps = new JsonOperations();
+    private static string BuildScriptContent(string[] existingContent)
+    {
+        string emailSender = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "EmailSender.exe");
 
-//             // Defina um caminho absoluto para o arquivo JSON
-//             var pathJsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "path.json");
-//             _logger.LogInformation($"Carregando caminho do arquivo JSON a partir de {pathJsonPath}");
-//             var _pathJson = jsonOps.LoadAppSettingsPathJson(pathJsonPath);
+        var scriptBuilder = new StringBuilder();
+        scriptBuilder.AppendLine("$logpath = $env:SystemDrive + \"\\windows\\temp\\log.txt\"");
+        scriptBuilder.AppendLine("Start-Transcript -Path $logPath -Force");
+        scriptBuilder.AppendLine("try {");
+        
+        foreach (string line in existingContent)
+        {
+            scriptBuilder.AppendLine(line);
+        }
+        
+        scriptBuilder.AppendLine("}");
+        scriptBuilder.AppendLine("catch {");
+        scriptBuilder.AppendLine("    Write-Host \"An error occurred: $_\"");
+        scriptBuilder.AppendLine("}");
+        scriptBuilder.AppendLine("finally {");
+        scriptBuilder.AppendLine("    Stop-Transcript");
+        scriptBuilder.AppendLine("}");
+        scriptBuilder.AppendLine($"Start-Process -FilePath \"{emailSender}\" -ArgumentList \"subject\", \"body\", $logpath\"");
 
-//             if (_pathJson != null)
-//             {
-//                 var appSettingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, _pathJson.Path);
-//                 _logger.LogInformation($"Caminho carregado: {appSettingsPath}");
-//                 var _appSettingsJson = jsonOps.LoadAppSettingsJson(appSettingsPath);
+        return scriptBuilder.ToString();
+    }
 
-//                 if (_appSettingsJson != null && _appSettingsJson.ServerImap != null)
-//                 {
-//                     _logger.LogInformation($"Usuário do IMAP: {_appSettingsJson.ServerImap.UserName}");
+    private static void WriteScriptContent(string path, string content)
+    {
+        File.WriteAllText(path, content);
+    }
 
-//                     EventLog.WriteEntry("MyService", _appSettingsJson.ServerImap.UserName, EventLogEntryType.Error);
-//                     Console.WriteLine(_appSettingsJson.ServerImap.UserName);
-//                 }
-//                 else
-//                 {
-//                     _logger.LogWarning("Configurações do JSON carregadas são nulas ou incompletas.");
-//                 }
-//             }
-//             else
-//             {
-//                 _logger.LogWarning("Falha ao carregar o caminho do JSON.");
-//             }
-//         }
-//         catch (Exception ex)
-//         {
-//             _logger.LogError(ex, "Erro durante a execução do ExecuteAsync");
-//             EventLog.WriteEntry("MyService", ex.ToString(), EventLogEntryType.Error);
-//         }
-//     }
-
-
-
-// }
+    private static void LogError(Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+        // Aqui você pode adicionar um código adicional para logar o erro em um sistema de logs ou enviar uma notificação por e-mail.
+    }
+}
