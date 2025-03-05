@@ -18,13 +18,12 @@ public static class Advanced
 
         string param = $"-accepteula {userName} {domain} {password}";
 
-        Basics.ProcessExecutorCmdLine(command, param, _appSettings, $"Configure AutoLogon {scriptPath}");
+        Tools.ProcessExecutorCmdLine(command, param, _appSettings, $"Configure AutoLogon {scriptPath}");
     }
     public static void DisableAutoLogon()
     {
         RegistryManagement.RegistryOperations.CreateRegistryEntry(Registry.LocalMachine, @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "AutoAdminLogon", "0");
     }
-
 
     //Scheduled tasks
     private static void ScheduledTasksActions(string taskName, string action, AppSettings _appSettings, bool noEmailReturnTasks = true)
@@ -40,7 +39,7 @@ public static class Advanced
         if (action == "delete")
             param = $"/delete /tn {taskName} /f";
 
-        Basics.ProcessExecutorCmdLine(command, param, _appSettings, $"Scheduled task Executed. -> {taskName}", noEmailReturnTasks);
+        Tools.ProcessExecutorCmdLine(command, param, _appSettings, $"Scheduled task Executed. -> {taskName}", noEmailReturnTasks);
     }
     public static void ScheduleBasicTaskPowerShellScript(string scriptPath, AppSettings _appSettings)
     {
@@ -51,9 +50,9 @@ public static class Advanced
         string param = $"/create /tn {taskName} /tr \"powershell.exe -NoProfile -ExecutionPolicy Bypass -File '{scriptPath}'\" /sc onlogon /ru {user}  /IT /f";
 
         ScheduledTasksActions(taskName, "delete", _appSettings);
-        Basics.ProcessExecutorCmdLine(command, param, _appSettings, $"Scheduled task created. -> {scriptPath}");
+        Tools.ProcessExecutorCmdLine(command, param, _appSettings, $"Scheduled task created. -> {scriptPath}");
         ScheduledTasksActions(taskName, "run", _appSettings);
-       // ScheduledTasksActions(taskName, "delete", _appSettings);
+        ScheduledTasksActions(taskName, "delete", _appSettings);
     }
     public static void ScheduleTaskHighestPowerShellScript(string scriptPath, AppSettings _appSettings, string userName, string password)
     {
@@ -62,14 +61,10 @@ public static class Advanced
         string param = $"/create /tn {taskName} /tr  \"powershell.exe -NoProfile -ExecutionPolicy Bypass -File '{scriptPath}'\" /sc onlogon /ru {userName} /rp {password} /RL HIGHEST /IT /f";
 
         ScheduledTasksActions(taskName, "delete", _appSettings);
-        Basics.ProcessExecutorCmdLine(command, param, _appSettings, $"Scheduled task created. -> {scriptPath}");
+        Tools.ProcessExecutorCmdLine(command, param, _appSettings, $"Scheduled task created. -> {scriptPath}");
         ScheduledTasksActions(taskName, "run", _appSettings);
-       // ScheduledTasksActions(taskName, "delete", _appSettings);
+        ScheduledTasksActions(taskName, "delete", _appSettings);
     }
-
-
-
-
 
 
 
@@ -85,7 +80,7 @@ public static class Advanced
     //     Console.WriteLine("psexec" + command);
     //     Console.WriteLine($"{param}\"");
 
-    //     Basics.ProcessExecutorCmdLine(command, param, _appSettings, $"Scheduled task created. -> {scriptPath}");
+    //     Tools.ProcessExecutorCmdLine(command, param, _appSettings, $"Scheduled task created. -> {scriptPath}");
     //     //get current user logged and save in a key on registry.
     //    // RegistryManagement.RegistryOperations.CreateRegistryEntry(Registry.LocalMachine, "SOFTWARE\\RemoteCmd", "current logged user", Environment.UserName);
     // }
@@ -107,7 +102,7 @@ public static class Advanced
     //     string command = "schtasks.exe";
 
     //     ScheduledTasksAction(taskName, "delete", _appSettings);
-    //     Basics.ProcessExecutorCmdLine(command, param, _appSettings, $"Scheduled task created. -> {scriptPath}");
+    //     Tools.ProcessExecutorCmdLine(command, param, _appSettings, $"Scheduled task created. -> {scriptPath}");
     //     ScheduledTasksAction(taskName, "run", _appSettings);
     //     ScheduledTasksAction(taskName, "delete", _appSettings);
     // }

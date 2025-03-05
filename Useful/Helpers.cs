@@ -1,9 +1,16 @@
 
 using System.Text;
+using System.Text.Json;
+using Microsoft.Win32;
+using RegistryManagement;
 
 public static class BasePath
 {
-    public static string Path { get; set; } = AppDomain.CurrentDomain.BaseDirectory;
+    public static string AppPath { get; set; } = AppDomain.CurrentDomain.BaseDirectory;
+    public static string jsonPath = RegistryOperations.GetRegistryValue(Registry.LocalMachine, "SOFTWARE\\RemoteCmd", "AppSettingsJson");
+    public static AppSettings AppSettingsJsonFile = JsonSerializer.Deserialize<AppSettings>(File.ReadAllText(jsonPath)) ?? new AppSettings();
+
+
 }
 public static class TextFile
 {
@@ -126,34 +133,12 @@ public static class TextFile
         // Aqui você pode adicionar um código adicional para logar o erro em um sistema de logs ou enviar uma notificação por e-mail.
     }
 
-    // public static string LogResultActionReturnEmail(string filePath)
-    // {
-    //     string emailSender = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "EmailSender.exe");
-
-    //     var stringBuilder = new StringBuilder();
-    //     stringBuilder.AppendLine("$logpath = $env:SystemDrive + \"\\windows\\temp\\log.txt\"");
-    //     stringBuilder.AppendLine("Start-Transcript -Path $logPath -Force");
-    //     stringBuilder.AppendLine("try {");
-
-    //     foreach (string line in ReadExistingContent(filePath))
-    //     {
-    //         stringBuilder.AppendLine(line);
-    //     }
-
-    //     stringBuilder.AppendLine("}");
-    //     stringBuilder.AppendLine("catch {");
-    //     stringBuilder.AppendLine("    Write-Host \"An error occurred: $_\"");
-    //     stringBuilder.AppendLine("}");
-    //     stringBuilder.AppendLine("finally {");
-    //     stringBuilder.AppendLine("    Stop-Transcript");
-    //     stringBuilder.AppendLine("}");
-    //     stringBuilder.AppendLine($"Start-Process -FilePath \"{emailSender}\" -ArgumentList \"subject\", \"body\", $logpath\"");
-
-    //     return stringBuilder.ToString();
-
-    // }
-
-
+    public static string OutPut(string output)
+    {
+        var report = new StringBuilder();
+        report.AppendLine(output);
+        return report.ToString();
+    }
 }
 
 

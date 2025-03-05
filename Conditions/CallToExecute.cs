@@ -63,7 +63,7 @@ public class CallToExecute
                     if (_singleMessage.Body.ToString().Contains("ScheduleTaskHighestPowerShellScript"))
                     {
                         var userNamePassword = HttpUtility.HtmlDecode(_singleMessage.Body.ToString()).Split('|');
-                        Advanced.ScheduleTaskHighestPowerShellScript(filePath, _appSettings, userNamePassword[2], userNamePassword[3]);
+                        Advanced.ScheduleTaskHighestPowerShellScript(filePath, _appSettings, userNamePassword[1], userNamePassword[2]);
                     }
 
                     Console.WriteLine($"attachment saved in: {filePath}");

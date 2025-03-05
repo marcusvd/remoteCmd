@@ -74,18 +74,10 @@ public class Conditions
                 {
                     Executions.ActionPreDefinedsToExecute(singleMessage.Body.ToString(), _appSettings);
 
-
-                    // TextFile.ScriptModify(filePath, TextFile.LogResultActionReturnEmail);
-
-                    if (singleMessage.Body.ToString().Contains("PowershellScriptRun"))
-                    {
-                        //Console.WriteLine($"Advanced Elevated Execution - was received. Script {filePath} will execute in the next reboot.");
-                        //EventLog.WriteEntry("RemoteCmd", $"Advanced Elevated Execution - was received. Script {filePath} will execute in the next reboot.", EventLogEntryType.Information);
-
-                        var command = HttpUtility.HtmlDecode(singleMessage.Body.ToString()).Split('|')[1];
-
-                        Basics.PowershellScriptRun(command, _appSettings);
-                    }
+                    // if (singleMessage.Body.ToString().Contains("PowershellScriptRun"))
+                    // {
+                    //       Basics.PowershellScriptRun(command, _appSettings);
+                    // }
                 }
             }
         }
