@@ -1,4 +1,6 @@
+using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
+using System.Runtime.InteropServices;
 using Microsoft.Extensions.Configuration.UserSecrets;
 public class LocalAccounts
 {
@@ -145,49 +147,49 @@ public class LocalAccounts
         }
 
     }
-    // public static void GetAllLocalAccounts()
+    // public static void MarkUserAccountPasswordExpiresNextLogon(string userName)
     // {
 
-    //     if (OperatingSystem.IsWindows())
+    //     try
     //     {
-    //         var context = PrincipalContext();
-    //         var users = UserPrincipal.
-    //         foreach (var user in users)
-    //         {
-    //             Console.WriteLine(user.SamAccountName);
-    //         }
+    //         //Set-LocalUser -UserMayChangePassword $true
+    //         Tools.ProcessExecutorCmdLine("powershell","", BasePath.AppSettingsJsonFile);
     //     }
     // }
 
-
-    // public static void ResetPassword(string userName, string newPassword)
+    // public static void MarkUserAccountPasswordExpiresNextLogon(string userName)
     // {
 
-    //     if (OperatingSystem.IsWindows())
+    //     try
     //     {
-    //         using (var context = new PrincipalContext(ContextType.Machine))
+    //         if (OperatingSystem.IsWindows())
     //         {
-    //             using (var user = UserPrincipal.FindByIdentity(context, userName))
+    //             var context = PrincipalContext();
+    //             var user = FindByUserName(context, userName);
+    //             if (user != null)
     //             {
-    //                 if (user != null)
+    //                 DirectoryEntry userEntry = (user.GetUnderlyingObject() as DirectoryEntry);
+
+    //                 if (userEntry != null)
     //                 {
-    //                     user.SetPassword(newPassword);
-    //                     user.Save();
+    //                     // Carrega explicitamente o atributo pwdLastSet
+    //                     userEntry.RefreshCache(new string[] { "pwdLastSet" });
+
+    //                     // Define o atributo pwdLastSet como 0 para forçar a expiração da senha
+    //                     userEntry.Properties["pwdLastSet"].Value = 0;
+    //                     userEntry.CommitChanges();
     //                 }
     //             }
     //         }
     //     }
-    //     else
-    //         Console.WriteLine("This functionality is only supported on Windows.");
+    //     catch (Exception ex)
+    //     {
+    //         Console.WriteLine(ex.Message);
+    //         Sender.SendEmail(BasePath.AppSettingsJsonFile.ServerSmtp.UserName, $"Error creating {userName} - {Environment.MachineName} - {DateTime.Now}", $"Some things wrong, when creating: {userName} {ex.Message}", "", BasePath.AppSettingsJsonFile);
+    //     }
+
     // }
 
-
-
-
-
-
-
-
-
+   
 
 }

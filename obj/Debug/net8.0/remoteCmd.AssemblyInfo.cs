@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("remoteCmd")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+105a9914c9dc8f9a8cd30306f69bf5cc0212533e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+376dbeec171b28f579a20cfb4a89a3eb7dfa08ab")]
 [assembly: System.Reflection.AssemblyProductAttribute("remoteCmd")]
 [assembly: System.Reflection.AssemblyTitleAttribute("remoteCmd")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0")]
