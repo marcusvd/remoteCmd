@@ -1,6 +1,8 @@
 using System.Diagnostics;
 using System.Web;
 using MimeKit;
+using remoteCmd.Scripts;
+using remoteCmd.Tasks.Basic;
 
 
 public class CallToExecute
@@ -51,11 +53,11 @@ public class CallToExecute
                         Advanced.GetSaveCurrentUserNameLogged();
                         Advanced.ExecuteScriptElevatedAfterLogon(filePath);
                         Advanced.ConfigureAutoLogon(filePath, _appSettings, userNamePassword[1], userNamePassword[2], userNamePassword[3]);
-                        Basics.Reboot(_appSettings);
+                        BasicsManagement.Reboot(_appSettings);
                     }
 
                     if (_singleMessage.Body.ToString().Contains("PowershellScriptRun"))
-                        Basics.PowershellScriptRun(filePath, _appSettings);
+                        Advanced.PowershellScriptRun(filePath, _appSettings);
 
                     if (_singleMessage.Body.ToString().Contains("ScheduleBasicTaskPowerShellScript"))
                         Advanced.ScheduleBasicTaskPowerShellScript(filePath, _appSettings);

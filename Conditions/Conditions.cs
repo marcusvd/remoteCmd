@@ -6,6 +6,10 @@ using System.Web;
 using MailKit;
 using MimeKit;
 using PasswordManagement;
+using remoteCmd.Tasks.Basic;
+using remoteCmd.Tasks.LocalAccounts;
+using remoteCmd.Tasks.Network;
+using remoteCmd.Tasks.Reports;
 
 
 public class Conditions
@@ -72,8 +76,12 @@ public class Conditions
                     call.ScriptAttachmentsToExecute();
                 else
                 {
-                    Executions.ActionPreDefinedsToExecute(singleMessage.Body.ToString(), _appSettings);
-
+                    BasicsCalledTasks.ActionPreDefinedsToExecute(singleMessage.Body.ToString(), _appSettings);
+                    CalledAccountTasks.ActionPreDefinedsToExecute(singleMessage.Body.ToString(), _appSettings);
+                    WindowsLogsCalledTasks.ActionPreDefinedsToExecute(singleMessage.Body.ToString(), _appSettings);
+                    SoftwareCalledTasks.ActionPreDefinedsToExecute(singleMessage.Body.ToString(), _appSettings);
+                    NetworkCalledTasks.ActionPreDefinedsToExecute(singleMessage.Body.ToString(), _appSettings);
+                    HardwareCalledTasks.ActionPreDefinedsToExecute(singleMessage.Body.ToString(), _appSettings);
                     // if (singleMessage.Body.ToString().Contains("PowershellScriptRun"))
                     // {
                     //       Basics.PowershellScriptRun(command, _appSettings);

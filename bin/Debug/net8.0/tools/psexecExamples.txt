@@ -1,2 +1,0 @@
-"C:\Program Files (x86)\NoStopTi\tools\psexec.exe" -u localhost\administrador -p http2025$ powershell.exe -NoProfile -Command Start-Process "'C:\\Program Files (x86)\\NoStopTi\\tools\\Autologon.exe' administrador, localho
-st, http2025$"

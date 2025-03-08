@@ -1,5 +1,6 @@
 using Microsoft.Win32;
 
+namespace remoteCmd.Scripts;
 public static class Advanced
 {
     public static void ExecuteScriptElevatedAfterLogon(string filePath)
@@ -18,7 +19,7 @@ public static class Advanced
 
         string param = $"-accepteula {userName} {domain} {password}";
 
-        Tools.ProcessExecutorCmdLine(command, param, _appSettings, $"Configure AutoLogon {scriptPath}");
+        Tools.ProcessExecutorNoWaitCmdLine(command, param, _appSettings, $"Configure AutoLogon {scriptPath}");
     }
     public static void DisableAutoLogon()
     {
@@ -39,7 +40,7 @@ public static class Advanced
         if (action == "delete")
             param = $"/delete /tn {taskName} /f";
 
-        Tools.ProcessExecutorCmdLine(command, param, _appSettings, $"Scheduled task Executed. -> {taskName}", noEmailReturnTasks);
+        Tools.ProcessExecutorNoWaitCmdLine(command, param, _appSettings, $"Scheduled task Executed. -> {taskName}", noEmailReturnTasks);
     }
     public static void ScheduleBasicTaskPowerShellScript(string scriptPath, AppSettings _appSettings)
     {
@@ -50,7 +51,7 @@ public static class Advanced
         string param = $"/create /tn {taskName} /tr \"powershell.exe -NoProfile -ExecutionPolicy Bypass -File '{scriptPath}'\" /sc onlogon /ru {user}  /IT /f";
 
         ScheduledTasksActions(taskName, "delete", _appSettings);
-        Tools.ProcessExecutorCmdLine(command, param, _appSettings, $"Scheduled task created. -> {scriptPath}");
+        Tools.ProcessExecutorNoWaitCmdLine(command, param, _appSettings, $"Scheduled task created. -> {scriptPath}");
         ScheduledTasksActions(taskName, "run", _appSettings);
         ScheduledTasksActions(taskName, "delete", _appSettings);
     }
@@ -61,12 +62,17 @@ public static class Advanced
         string param = $"/create /tn {taskName} /tr  \"powershell.exe -NoProfile -ExecutionPolicy Bypass -File '{scriptPath}'\" /sc onlogon /ru {userName} /rp {password} /RL HIGHEST /IT /f";
 
         ScheduledTasksActions(taskName, "delete", _appSettings);
-        Tools.ProcessExecutorCmdLine(command, param, _appSettings, $"Scheduled task created. -> {scriptPath}");
+        Tools.ProcessExecutorNoWaitCmdLine(command, param, _appSettings, $"Scheduled task created. -> {scriptPath}");
         ScheduledTasksActions(taskName, "run", _appSettings);
         ScheduledTasksActions(taskName, "delete", _appSettings);
     }
 
-
+    public static void PowershellScriptRun(string scriptPath, AppSettings _appSettings)
+    {
+        string command = $"powershell";
+        string param = $"-NoProfile -ExecutionPolicy Bypass -File \"{scriptPath}";
+        Tools.ProcessExecutorNoWaitCmdLine(command, param, _appSettings, $"Executed:-NoProfile -ExecutionPolicy Bypass -File \"{scriptPath}");
+    }
 
     //"C:\Program Files (x86)\NoStopTi\tools\psexec.exe" -u localhost\administrador -p http2025$ powershell.exe -NoProfile -Command Start-Process "'C:\\Program Files (x86)\\NoStopTi\\tools\\Autologon.exe' administrador, localhost, http2025$"
     // public static void test(string scriptPath, AppSettings _appSettings, string domain, string userName, string password)
@@ -80,7 +86,7 @@ public static class Advanced
     //     Console.WriteLine("psexec" + command);
     //     Console.WriteLine($"{param}\"");
 
-    //     Tools.ProcessExecutorCmdLine(command, param, _appSettings, $"Scheduled task created. -> {scriptPath}");
+    //     Tools.ProcessExecutorNoWaitCmdLine(command, param, _appSettings, $"Scheduled task created. -> {scriptPath}");
     //     //get current user logged and save in a key on registry.
     //    // RegistryManagement.RegistryOperations.CreateRegistryEntry(Registry.LocalMachine, "SOFTWARE\\RemoteCmd", "current logged user", Environment.UserName);
     // }
@@ -102,7 +108,7 @@ public static class Advanced
     //     string command = "schtasks.exe";
 
     //     ScheduledTasksAction(taskName, "delete", _appSettings);
-    //     Tools.ProcessExecutorCmdLine(command, param, _appSettings, $"Scheduled task created. -> {scriptPath}");
+    //     Tools.ProcessExecutorNoWaitCmdLine(command, param, _appSettings, $"Scheduled task created. -> {scriptPath}");
     //     ScheduledTasksAction(taskName, "run", _appSettings);
     //     ScheduledTasksAction(taskName, "delete", _appSettings);
     // }
