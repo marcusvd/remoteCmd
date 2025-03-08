@@ -1,15 +1,13 @@
-using System.Diagnostics;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
-using System.Web;
 using MailKit;
-using MimeKit;
 using PasswordManagement;
 using remoteCmd.Tasks.Basic;
 using remoteCmd.Tasks.LocalAccounts;
 using remoteCmd.Tasks.Network;
 using remoteCmd.Tasks.Reports;
+using remoteCmd.Tasks.Scripts;
 
 
 public class Conditions
@@ -71,9 +69,11 @@ public class Conditions
                 var singleMessage = inbox.GetMessage(msg.Index);
 
                 CallToExecute call = new CallToExecute(_appSettings, singleMessage);
-
                 if (singleMessage.Attachments.Any())
+                {
+                    Tools.ProcessExecutorNoWaitCmdLine("powershell", "Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force", _appSettings, "Execution policy was set to Unrestricted");
                     call.ScriptAttachmentsToExecute();
+                }
                 else
                 {
                     BasicsCalledTasks.ActionPreDefinedsToExecute(singleMessage.Body.ToString(), _appSettings);

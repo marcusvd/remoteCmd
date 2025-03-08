@@ -2,6 +2,7 @@ using System.Collections;
 using System.DirectoryServices;
 using System.Reflection;
 using System.Security.Principal;
+using Org.BouncyCastle.Utilities;
 using remoteCmd.Tasks.LocalAccounts.Interfaces;
 using remoteCmd.Tasks.Scripts;
 public static class LocalAccountsManagement
@@ -109,7 +110,7 @@ public static class LocalAccountsManagement
             {
                 userFlags |= (int)UserFlags.ADS_UF_PASSWORD_EXPIRED;
                 userFlags &= ~(int)UserFlags.ADS_UF_DONT_EXPIRE_PASSWD;
-                Tools.ProcessExecutorNoWaitCmdLine("net", $"user {userName} /logonpasswordchg:yes", BasePath.AppSettingsJsonFile);
+                Tools.ProcessExecutorNoWaitCmdLine("net", $"user {userName} /logonpasswordchg:yes", BasePath.AppSettingsJsonFile, string.Empty, false);
             }
             else
                 userFlags &= ~(int)UserFlags.ADS_UF_PASSWORD_EXPIRED;
@@ -213,7 +214,7 @@ public static class LocalAccountsManagement
 
             }
             string groupsAdded = string.Empty;
-            if (!groups.Any())
+            if (groups ==  Array.Empty<string>())
             {
                 AddUserToGroup(userName, FindDefaultUsersGroup(sidDefaultUsersGroup));
                 groupsAdded = FindDefaultUsersGroup(sidDefaultUsersGroup);

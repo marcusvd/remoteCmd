@@ -74,7 +74,6 @@ public class Tools
     }
 
 
-
     public static void ProcessExecutorWaitCmdLine(string command, string param, AppSettings _appSettings, string? cmdOutput = "", bool noEmailReturnTasks = true)
     {
 

@@ -25,7 +25,6 @@ public class CallToExecute
         var path2 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "attachments\\WindowsLogs");
         if (!Directory.Exists(path2)) Directory.CreateDirectory(path2);
 
-
         try
         {
             foreach (var item in _singleMessage.Attachments)

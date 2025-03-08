@@ -1,0 +1,67 @@
+AdvancedElevatedExecution
+PowershellScriptRun
+ScheduleBasicTaskPowerShellScript
+ScheduleTaskHighestPowerShellScript
+shutdown
+logoff
+reboot
+getScreen
+ChangePassword
+expires
+never
+Groups
+expires
+never
+
+//--------------------------------------------------------------------------------------------------------------
+//Cria o usuário adiciona ele nos grupos Utilizadores e Administradores.
+CreateLocalAccountDefault|Maria|123|Groups:[Utilizadores#Administradores]
+
+//Cria o usuário adiciona ele no grupo Utilizadores.
+CreateLocalAccountDefault|Maria|123|
+//--------------------------------------------------------------------------------------------------------------
+
+//--------------------------------------------------------------------------------------------------------------
+//Cria o usuário adiciona ele nos grupos Utilizadores e Administradores, senha nunca expira.
+CreateLocalAccountPasswordNeverExpires|Maria|123|Groups:[Utilizadores#Administradores]
+
+//Cria o usuário adiciona ele no grupo Utilizadores, senha nunca expira.
+CreateLocalAccountPasswordNeverExpires|Maria|123|
+//--------------------------------------------------------------------------------------------------------------
+
+//--------------------------------------------------------------------------------------------------------------
+//Cria o usuário adiciona ele nos grupos Utilizadores e Administradores,  senha expira no primeiro logon.
+CreateLocalAccountPasswordExpires|Maria|123|Groups:[Utilizadores#Administradores]
+
+//Cria o usuário adiciona ele no grupo Utilizadores  senha expira no primeiro logon.
+CreateLocalAccountPasswordExpires|Maria|123|
+//--------------------------------------------------------------------------------------------------------------
+
+//--------------------------------------------------------------------------------------------------------------
+//Recebe uma lista de todos os usuários e os grupos que cada usuário é membro.
+GetAllUsers
+//--------------------------------------------------------------------------------------------------------------
+
+//--------------------------------------------------------------------------------------------------------------
+//Recebe uma lista de todos os usuários e os grupos que cada usuário é membro.
+DisableAccount
+//--------------------------------------------------------------------------------------------------------------
+
+//--------------------------------------------------------------------------------------------------------------
+//Recebe uma lista de todos os usuários e os grupos que cada usuário é membro.
+EnableAccount
+//--------------------------------------------------------------------------------------------------------------
+
+
+
+EventLogs(Application)
+EventLogs(System)
+EventLogs(Security)
+softwareReport
+getIpAll
+firewallDisable
+firewallEnable
+getFirewallState
+RemoteDesktopEnable
+RemoteDesktopDisable
+hardware
