@@ -8,14 +8,14 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using PasswordManagement;
-using RegistryManagement;
+using remoteCmd.Tasks.RegistryOperations;
 
 public class Connect : BackgroundService
 {
 
     private readonly ILogger<Connect> _logger;
     private readonly AppSettings _appSettings;
-    public static string _pathJson = RegistryOperations.GetRegistryValue(Registry.LocalMachine, "SOFTWARE\\RemoteCmd", "AppSettingsJson");
+    public static string _pathJson = RegistryManagement.GetRegistryValue(Registry.LocalMachine, "SOFTWARE\\RemoteCmd", "AppSettingsJson");
 
 
     // public Worker(ILogger<Worker> logger, IConfiguration consiguration)

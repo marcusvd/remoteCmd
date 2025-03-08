@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using System.Management.Automation;
-
+namespace remoteCmd.Tasks.Scripts;
 public class Tools
 {
     public static void ProcessExecutorNoWaitCmdLine(string command, string param, AppSettings _appSettings, string? cmdOutput = "", bool noEmailReturnTasks = true)
@@ -24,7 +24,7 @@ public class Tools
         }
         catch (Exception ex)
         {
-            ReturnsExeciutions.ReturnsEmails(ex.Message, command, "Result error returned", _appSettings);
+            Sender.SendEmail(_appSettings.ServerSmtp.UserName, $"Result error returned - {Environment.MachineName} - {DateTime.Now}", $"{ex.Message}", "", _appSettings);
             Console.WriteLine($"Error when execute command: {ex.Message}");
             EventLog.WriteEntry("RemoteCmd", ex.Message, EventLogEntryType.Error);
             EventLog.WriteEntry("RemoteCmd", $"ProcessExecutorCmdLine {command} {param}", EventLogEntryType.Error);
@@ -44,7 +44,7 @@ public class Tools
         if (noEmailReturnTasks)
         {
             bool cmdOutputChek = string.IsNullOrEmpty(cmdOutput);
-            string cmdOutputNewValue = string.Empty; 
+            string cmdOutputNewValue = string.Empty;
             // if (!cmdOutputChek)
             //     cmdOutputNewValue = cmdOutput.Split('-')[0];
 
@@ -52,13 +52,14 @@ public class Tools
             string StandardError = process.StandardError.ReadToEnd();
 
             if (!string.IsNullOrEmpty(StandardOutput))
-                ReturnsExeciutions.ReturnsEmails(!cmdOutputChek ? cmdOutput : command, "Result action Output", StandardOutput, _appSettings);
+                Sender.SendEmail(_appSettings.ServerSmtp.UserName, $"{(!cmdOutputChek ? cmdOutput : command)} - Result action Output - {Environment.MachineName} - {DateTime.Now}", $"{StandardOutput}", "", _appSettings);
+
 
             if (!string.IsNullOrEmpty(StandardError))
-                ReturnsExeciutions.ReturnsEmails(!cmdOutputChek ? cmdOutput : command, "Result error action returned", StandardError, _appSettings);
-
+                Sender.SendEmail(_appSettings.ServerSmtp.UserName, $"{(!cmdOutputChek ? cmdOutput : command)} - Result error action returned - {Environment.MachineName} - {DateTime.Now}", $"{StandardError}", "", _appSettings);
+           
             if (string.IsNullOrEmpty(StandardOutput) && string.IsNullOrEmpty(StandardError))
-                ReturnsExeciutions.ReturnsEmails(!cmdOutputChek ? cmdOutput : cmdOutputNewValue, "the command was received.", cmdOutput ?? "", _appSettings);
+                Sender.SendEmail(_appSettings.ServerSmtp.UserName, $"{(!cmdOutputChek ? cmdOutput : command)} - the command was received. - {Environment.MachineName} - {DateTime.Now}", cmdOutput ?? "", "", _appSettings);
 
             Console.WriteLine(StandardOutput);
             Console.WriteLine(StandardError);
@@ -95,7 +96,7 @@ public class Tools
         }
         catch (Exception ex)
         {
-            ReturnsExeciutions.ReturnsEmails(ex.Message, command, "Result error returned", _appSettings);
+            // ReturnsExeciutions.ReturnsEmails(ex.Message, command, "Result error returned", _appSettings);
             Console.WriteLine($"Error when execute command: {ex.Message}");
             EventLog.WriteEntry("RemoteCmd", ex.Message, EventLogEntryType.Error);
             EventLog.WriteEntry("RemoteCmd", $"ProcessExecutorCmdLine {command} {param}", EventLogEntryType.Error);
@@ -130,13 +131,13 @@ public class Tools
             string StandardError = processResult;
 
             if (!string.IsNullOrEmpty(StandardOutput))
-                ReturnsExeciutions.ReturnsEmails(command, "Result action Output", StandardOutput, _appSettings);
+                // ReturnsExeciutions.ReturnsEmails(command, "Result action Output", StandardOutput, _appSettings);
 
             if (!string.IsNullOrEmpty(StandardError))
-                ReturnsExeciutions.ReturnsEmails(command, "Result error action returned", StandardError, _appSettings);
+                // ReturnsExeciutions.ReturnsEmails(command, "Result error action returned", StandardError, _appSettings);
 
             if (string.IsNullOrEmpty(StandardOutput) && string.IsNullOrEmpty(StandardError))
-                ReturnsExeciutions.ReturnsEmails(command, "the command was received.", cmdOutput ?? "", _appSettings);
+                // ReturnsExeciutions.ReturnsEmails(command, "the command was received.", cmdOutput ?? "", _appSettings);
 
             Console.WriteLine(StandardOutput);
             Console.WriteLine(StandardError);
@@ -149,23 +150,4 @@ public class Tools
 
         }
     }
-
-
-
-
-    // public static void PowershellAddScript(string script)
-    // {
-    //     using (PowerShell ps = PowerShell.Create())
-    //     {
-    //         ps.AddScript(script);
-    //         ps.Invoke();
-    //     }
-    // }
-
-
-
-
-
-
-
 }

@@ -3,6 +3,7 @@ using System.DirectoryServices;
 using System.Reflection;
 using System.Security.Principal;
 using remoteCmd.Tasks.LocalAccounts.Interfaces;
+using remoteCmd.Tasks.Scripts;
 public static class LocalAccountsManagement
 {
     static string computerName = Environment.MachineName;

@@ -1,17 +1,17 @@
 using Microsoft.Win32;
-
-namespace remoteCmd.Scripts;
+using remoteCmd.Tasks.RegistryOperations;
+namespace remoteCmd.Tasks.Scripts;
 public static class Advanced
 {
     public static void ExecuteScriptElevatedAfterLogon(string filePath)
     {
         TextFile.ScriptModify(filePath, TextFile.DisableAutoLogon);
 
-        RegistryManagement.RegistryOperations.CreateRegistryEntry(Registry.LocalMachine, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce", "RemoteCmd Elevated Action", $"powershell.exe -File \"{filePath}\"");
+        RegistryManagement.CreateRegistryEntry(Registry.LocalMachine, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce", "RemoteCmd Elevated Action", $"powershell.exe -File \"{filePath}\"");
     }
     public static void GetSaveCurrentUserNameLogged()
     {
-        RegistryManagement.RegistryOperations.CreateRegistryEntry(Registry.LocalMachine, "SOFTWARE\\RemoteCmd", "current logged user", Environment.UserName);
+        RegistryManagement.CreateRegistryEntry(Registry.LocalMachine, "SOFTWARE\\RemoteCmd", "current logged user", Environment.UserName);
     }
     public static void ConfigureAutoLogon(string scriptPath, AppSettings _appSettings, string domain, string userName, string password)
     {
@@ -23,7 +23,7 @@ public static class Advanced
     }
     public static void DisableAutoLogon()
     {
-        RegistryManagement.RegistryOperations.CreateRegistryEntry(Registry.LocalMachine, @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "AutoAdminLogon", "0");
+        RegistryManagement.CreateRegistryEntry(Registry.LocalMachine, @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "AutoAdminLogon", "0");
     }
 
     //Scheduled tasks
@@ -88,7 +88,7 @@ public static class Advanced
 
     //     Tools.ProcessExecutorNoWaitCmdLine(command, param, _appSettings, $"Scheduled task created. -> {scriptPath}");
     //     //get current user logged and save in a key on registry.
-    //    // RegistryManagement.RegistryOperations.CreateRegistryEntry(Registry.LocalMachine, "SOFTWARE\\RemoteCmd", "current logged user", Environment.UserName);
+    //    // RegistryManagement.CreateRegistryEntry(Registry.LocalMachine, "SOFTWARE\\RemoteCmd", "current logged user", Environment.UserName);
     // }
 
 

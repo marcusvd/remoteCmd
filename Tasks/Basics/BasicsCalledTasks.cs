@@ -18,9 +18,9 @@ public class BasicsCalledTasks
         if (reboot)
             BasicsManagement.Reboot(_appSettings);
        
-        // var getScreen = body.Contains("getScreen", StringComparison.OrdinalIgnoreCase);
-        // if (getScreen)
-        //     BasicsManagement.GetScreen(_appSettings);
+        var getScreen = body.Contains("getScreen", StringComparison.OrdinalIgnoreCase);
+        if (getScreen)
+            GetScreen.GetPrintScreen(_appSettings);
     }
 
 

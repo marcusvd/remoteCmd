@@ -2,12 +2,12 @@
 using System.Text;
 using System.Text.Json;
 using Microsoft.Win32;
-using RegistryManagement;
+using remoteCmd.Tasks.RegistryOperations;
 
 public static class BasePath
 {
     public static string AppPath { get; set; } = AppDomain.CurrentDomain.BaseDirectory;
-    public static string jsonPath = RegistryOperations.GetRegistryValue(Registry.LocalMachine, "SOFTWARE\\RemoteCmd", "AppSettingsJson");
+    public static string jsonPath = RegistryManagement.GetRegistryValue(Registry.LocalMachine, "SOFTWARE\\RemoteCmd", "AppSettingsJson");
     public static AppSettings AppSettingsJsonFile = JsonSerializer.Deserialize<AppSettings>(File.ReadAllText(jsonPath)) ?? new AppSettings();
 
 

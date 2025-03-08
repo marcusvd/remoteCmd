@@ -1,10 +1,10 @@
 using System.Text.Json;
 using Microsoft.Win32;
-using RegistryManagement;
+using remoteCmd.Tasks.RegistryOperations;
 
 public static class JsonManagement
 {
-    public static string jsonPath = RegistryOperations.GetRegistryValue(Registry.LocalMachine, "SOFTWARE\\RemoteCmd", "AppSettingsJson");
+    public static string jsonPath = RegistryManagement.GetRegistryValue(Registry.LocalMachine, "SOFTWARE\\RemoteCmd", "AppSettingsJson");
 
     public static AppSettings LoadJson(string pathJsonFile)
     {

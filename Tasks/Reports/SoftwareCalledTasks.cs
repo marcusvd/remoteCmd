@@ -6,7 +6,9 @@ public static class SoftwareCalledTasks
     {
         var softwareReport = body.Contains("softwareReport", StringComparison.OrdinalIgnoreCase);
         if (softwareReport)
+        {
             SoftwareManagement.GetListAllInstalledSoftware(_appSettings);
+        }
     }
 
 

@@ -14,8 +14,7 @@
           "System.DirectoryServices.AccountManagement": "8.0.1",
           "System.Management": "8.0.0",
           "System.Management.Automation": "7.2.24",
-          "PasswordManagement": "1.0.0.0",
-          "RegistryManagement": "1.0.0.0"
+          "PasswordManagement": "1.0.0.0"
         },
         "runtime": {
           "remoteCmd.dll": {}
@@ -1148,14 +1147,6 @@
             "fileVersion": "1.0.0.0"
           }
         }
-      },
-      "RegistryManagement/1.0.0.0": {
-        "runtime": {
-          "RegistryManagement.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
       }
     }
   },
@@ -1600,11 +1591,6 @@
       "hashPath": "system.windows.extensions.6.0.0.nupkg.sha512"
     },
     "PasswordManagement/1.0.0.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "RegistryManagement/1.0.0.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""

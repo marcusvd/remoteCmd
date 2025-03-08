@@ -18,9 +18,6 @@
     <Reference Include="PasswordManagement">
       <HintPath>PasswordManagement.dll</HintPath>
     </Reference>
-    <Reference Include="RegistryManagement">
-      <HintPath>RegistryManagement.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Update="appsettings.json">

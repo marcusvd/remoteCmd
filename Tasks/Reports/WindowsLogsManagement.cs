@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using remoteCmd.Tasks.Scripts;
 namespace remoteCmd.Tasks.Reports;
 public static class WindowsLogsManagement
 {
