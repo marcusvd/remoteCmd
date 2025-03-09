@@ -17,8 +17,8 @@ public static class Advanced
     {
         string command = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tools\\Autologon.exe");
 
-        string param = $"-accepteula {userName} {domain} {password}";
-
+        string param = $"/accepteula {userName} {domain} {password}";
+        
         Tools.ProcessExecutorNoWaitCmdLine(command, param, _appSettings, $"Configure AutoLogon {scriptPath}");
     }
     public static void DisableAutoLogon()
@@ -29,10 +29,9 @@ public static class Advanced
     //Scheduled tasks
     private static void ScheduledTasksActions(string taskName, string action, AppSettings _appSettings, bool noEmailReturnTasks = true)
     {
-        string user = Environment.UserName;
-        // string taskName = "RemoteCmdScriptTask";
+
         string command = "schtasks.exe";
-        string param = "";
+        string param = string.Empty;
 
         if (action == "run")
             param = $"/run /tn {taskName}";
@@ -57,14 +56,14 @@ public static class Advanced
     }
     public static void ScheduleTaskHighestPowerShellScript(string scriptPath, AppSettings _appSettings, string userName, string password)
     {
-        string taskName = "RemoteCmd-ScheduleTaskHighestPowerShellScript";
+        string taskName = "RemoteCmdScheduleTaskHighest";
         string command = "schtasks.exe";
         string param = $"/create /tn {taskName} /tr  \"powershell.exe -NoProfile -ExecutionPolicy Bypass -File '{scriptPath}'\" /sc onlogon /ru {userName} /rp {password} /RL HIGHEST /IT /f";
 
-        ScheduledTasksActions(taskName, "delete", _appSettings);
-        Tools.ProcessExecutorNoWaitCmdLine(command, param, _appSettings, $"Scheduled task created. -> {scriptPath}");
+        ScheduledTasksActions(taskName, "delete", _appSettings, false);
+        Tools.ProcessExecutorNoWaitCmdLine(command, param, _appSettings, $"Scheduled task created. -> {scriptPath}", false);
         ScheduledTasksActions(taskName, "run", _appSettings);
-        ScheduledTasksActions(taskName, "delete", _appSettings);
+        ScheduledTasksActions(taskName, "delete", _appSettings, false);
     }
 
     public static void PowershellScriptRun(string scriptPath, AppSettings _appSettings)

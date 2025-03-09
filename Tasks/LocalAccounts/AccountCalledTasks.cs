@@ -4,22 +4,32 @@ namespace remoteCmd.Tasks.LocalAccounts
     {
         public static void ActionPreDefinedsToExecute(string body, AppSettings _appSettings)
         {
+           
             var ChangePassword = body.Contains("ChangePassword", StringComparison.OrdinalIgnoreCase);
-            if (ChangePassword)
+            var ChangePasswordNever = body.Contains("ChangePasswordNever", StringComparison.OrdinalIgnoreCase);
+            var ChangePasswordExpires = body.Contains("ChangePasswordExpires", StringComparison.OrdinalIgnoreCase);
+
+            if (ChangePassword || ChangePasswordNever || ChangePasswordExpires)
             {
-                bool pwdExpires = false;
-                bool pwdNeverExpires = false;
+                bool pwdExpires = ChangePasswordExpires ? true : false;
+                bool pwdNeverExpires = ChangePasswordNever ? true : false;
 
-                if (body.Contains("expires", StringComparison.OrdinalIgnoreCase))
-                    pwdExpires = true;
+                // if (body.Contains("expires", StringComparison.OrdinalIgnoreCase))
+                //     pwdExpires = true;
 
-                if (body.Contains("never", StringComparison.OrdinalIgnoreCase))
-                    pwdNeverExpires = true;
+                // if (body.Contains("never", StringComparison.OrdinalIgnoreCase))
+                //     pwdNeverExpires = true;
 
                 var userName_NewPassword = body.Split("|");
 
                 LocalAccountsManagement.ChangePassword(userName_NewPassword[1], userName_NewPassword[2], pwdExpires, pwdNeverExpires);
             }
+
+
+
+
+
+
 
             var CreateLocalAccountDefault = body.Contains("CreateLocalAccountDefault", StringComparison.OrdinalIgnoreCase);
             if (CreateLocalAccountDefault)
@@ -66,14 +76,14 @@ namespace remoteCmd.Tasks.LocalAccounts
             if (DisableAccount)
             {
                 var userName = body.Split("|");
-                LocalAccountsManagement.EnableDisableAccount(userName[1], true);
+                LocalAccountsManagement.EnableDisableAccount(userName[1], false);
             }
 
             var EnableAccount = body.Contains("EnableAccount", StringComparison.OrdinalIgnoreCase);
             if (EnableAccount)
             {
                 var userName = body.Split("|");
-                LocalAccountsManagement.EnableDisableAccount(userName[1], false);
+                LocalAccountsManagement.EnableDisableAccount(userName[1], true);
             }
 
         }

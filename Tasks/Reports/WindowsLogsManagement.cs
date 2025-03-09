@@ -1,18 +1,30 @@
-using System.Diagnostics;
 using remoteCmd.Tasks.Scripts;
 namespace remoteCmd.Tasks.Reports;
 public static class WindowsLogsManagement
 {
-    public async static Task<string> ExportEventLogsToEvtx(string logName, string filePath, AppSettings _appsettings, string? startDate = "", string? endDate = "")
+    public async static Task<string> ExportEventLogsToEvtx(string logName, string filePath, AppSettings _appsettings)
     {
         string command = "cmd.exe";
         string arguments = $"/c wevtutil epl {logName} \"{filePath}\"";
-        
-        if(File.Exists(filePath))
+
+        if (File.Exists(filePath))
             File.Delete(filePath);
 
-        await Task.Run(() => Tools.ProcessExecutorNoWaitCmdLine(command, arguments, _appsettings)
+        await Task.Run(() => Tools.ProcessExecutorNoWaitCmdLine(command, arguments, _appsettings, "", false)
         );
+        return filePath;
+    }
+    public async static Task<string> GetListEventLogs(string filePath, AppSettings _appSettings)
+    {
+
+        string command = "cmd.exe";
+        string arguments = $"/c wevtutil enum-logs > \"{filePath}\"";
+
+        if (File.Exists(filePath))
+            File.Delete(filePath);
+
+        await Task.Run(() => Tools.ProcessExecutorNoWaitCmdLine(command, arguments, _appSettings, "", false));
+        
         return filePath;
     }
 

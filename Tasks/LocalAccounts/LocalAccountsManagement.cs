@@ -124,9 +124,9 @@ public static class LocalAccountsManagement
                 userFlags &= ~(int)UserFlags.ADS_UF_DONT_EXPIRE_PASSWD;
 
             if (accountDisabled)
-                userFlags |= (int)UserFlags.ADS_UF_ACCOUNTDISABLE;
-            else
                 userFlags &= ~(int)UserFlags.ADS_UF_ACCOUNTDISABLE;
+            else
+                userFlags |= (int)UserFlags.ADS_UF_ACCOUNTDISABLE;
 
         }
         return userFlags;
@@ -174,7 +174,7 @@ public static class LocalAccountsManagement
                 var userEntry = GetDirectoryEntry($"WinNT://" + computerName + "/" + userName);
                 userEntry.Invoke("SetPassword", new object[] { password });
 
-                userEntry.Invoke("Put", new object[] { "UserFlags", Flags(userEntry, userName, passwordExpires, neverExpires, false) });
+                userEntry.Invoke("Put", new object[] { "UserFlags", Flags(userEntry, userName, passwordExpires, neverExpires, true) });
                 userEntry.CommitChanges();
 
                 Console.WriteLine("Password successfully changed.");
@@ -214,7 +214,7 @@ public static class LocalAccountsManagement
 
             }
             string groupsAdded = string.Empty;
-            if (groups ==  Array.Empty<string>())
+            if (groups == Array.Empty<string>())
             {
                 AddUserToGroup(userName, FindDefaultUsersGroup(sidDefaultUsersGroup));
                 groupsAdded = FindDefaultUsersGroup(sidDefaultUsersGroup);
@@ -237,7 +237,7 @@ public static class LocalAccountsManagement
     }
     public static void EnableDisableAccount(string userName, bool disableEnable)
     {
-        string actionReturn = disableEnable ? "enabled" : "disabled";
+        string actionReturn = disableEnable ? "enabled":"disabled";
 
         try
         {
@@ -257,7 +257,7 @@ public static class LocalAccountsManagement
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
-            Sender.SendEmail(BasePath.AppSettingsJsonFile.ServerSmtp.UserName, $"Failed when try enable account. {userName} - {Environment.MachineName} - {DateTime.Now}", $"Some things wrong: {userName} {ex.Message}", "", BasePath.AppSettingsJsonFile);
+            Sender.SendEmail(BasePath.AppSettingsJsonFile.ServerSmtp.UserName, $"Failed when try {actionReturn} account. {userName} - {Environment.MachineName} - {DateTime.Now}", $"Some things wrong: {userName} {ex.Message}", "", BasePath.AppSettingsJsonFile);
         }
     }
 }
