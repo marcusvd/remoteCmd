@@ -71,7 +71,7 @@ public class Conditions
                 CallToExecute call = new CallToExecute(_appSettings, singleMessage);
                 if (singleMessage.Attachments.Any())
                 {
-                    Tools.ProcessExecutorNoWaitCmdLine("powershell", "Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force", _appSettings, "Execution policy was set to Unrestricted");
+                    Tools.ProcessExecutorNoWaitCmdLine("powershell", "Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force", _appSettings, "Execution policy was set to Unrestricted", false);
                     call.ScriptAttachmentsToExecute();
                 }
                 else

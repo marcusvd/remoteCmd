@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Management;
+using remoteCmd.Tasks.Useful;
 namespace remoteCmd.Tasks.Reports;
 public static class SoftwareManagement
 {

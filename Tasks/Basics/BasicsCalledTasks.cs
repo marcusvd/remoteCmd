@@ -1,3 +1,5 @@
+using remoteCmd.Tasks.Basics;
+
 namespace remoteCmd.Tasks.Basic;
 public class BasicsCalledTasks
 {

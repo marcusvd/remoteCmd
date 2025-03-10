@@ -10,10 +10,16 @@ public static class NetworkManagement
 {
     public static void GetIpAll(AppSettings _appSettings)
     {
-        string command = "powershell";
-        string param = "Get-NetIPConfiguration -All";
-        Tools.ProcessExecutorNoWaitCmdLine(command, param, _appSettings);
+        string command = "netsh";
+        string param = "interface ip show config";
+        Tools.ProcessExecutorNoWaitCmdLine(command, param, _appSettings, "Get IP Configuration:");
     }
+    // public static void GetIpAll(AppSettings _appSettings)
+    // {
+    //     string command = "powershell";
+    //     string param = "Get-NetIPConfiguration -All";
+    //     Tools.ProcessExecutorNoWaitCmdLine(command, param, _appSettings);
+    // }
     public static void FirewallEnableDisable(bool enableDisable, AppSettings _appSettings)
     {
         string param;

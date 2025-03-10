@@ -41,23 +41,24 @@ public class Tools
     }
     private static void ProcessExecutorNotification(Process process, bool noEmailReturnTasks, string command, AppSettings _appSettings, string? cmdOutput = "")
     {
+
+        bool cmdOutputChek = string.IsNullOrEmpty(cmdOutput);
+        string cmdOutputNewValue = string.Empty;
+        // if (!cmdOutputChek)
+        //     cmdOutputNewValue = cmdOutput.Split('-')[0];
+
+        string StandardOutput = process.StandardOutput.ReadToEnd();
+        string StandardError = process.StandardError.ReadToEnd();
+        
         if (noEmailReturnTasks)
         {
-            bool cmdOutputChek = string.IsNullOrEmpty(cmdOutput);
-            string cmdOutputNewValue = string.Empty;
-            // if (!cmdOutputChek)
-            //     cmdOutputNewValue = cmdOutput.Split('-')[0];
-
-            string StandardOutput = process.StandardOutput.ReadToEnd();
-            string StandardError = process.StandardError.ReadToEnd();
-
             if (!string.IsNullOrEmpty(StandardOutput))
                 Sender.SendEmail(_appSettings.ServerSmtp.UserName, $"{(!cmdOutputChek ? cmdOutput : command)} - Result action Output - {Environment.MachineName} - {DateTime.Now}", $"{StandardOutput}", "", _appSettings);
 
 
             if (!string.IsNullOrEmpty(StandardError))
                 Sender.SendEmail(_appSettings.ServerSmtp.UserName, $"{(!cmdOutputChek ? cmdOutput : command)} - Result error action returned - {Environment.MachineName} - {DateTime.Now}", $"{StandardError}", "", _appSettings);
-           
+
             if (string.IsNullOrEmpty(StandardOutput) && string.IsNullOrEmpty(StandardError))
                 Sender.SendEmail(_appSettings.ServerSmtp.UserName, $"{(!cmdOutputChek ? cmdOutput : command)} - the command was received. - {Environment.MachineName} - {DateTime.Now}", cmdOutput ?? "", "", _appSettings);
 
@@ -132,13 +133,13 @@ public class Tools
             if (!string.IsNullOrEmpty(StandardOutput))
                 // ReturnsExeciutions.ReturnsEmails(command, "Result action Output", StandardOutput, _appSettings);
 
-            if (!string.IsNullOrEmpty(StandardError))
-                // ReturnsExeciutions.ReturnsEmails(command, "Result error action returned", StandardError, _appSettings);
+                if (!string.IsNullOrEmpty(StandardError))
+                    // ReturnsExeciutions.ReturnsEmails(command, "Result error action returned", StandardError, _appSettings);
 
-            if (string.IsNullOrEmpty(StandardOutput) && string.IsNullOrEmpty(StandardError))
-                // ReturnsExeciutions.ReturnsEmails(command, "the command was received.", cmdOutput ?? "", _appSettings);
+                    if (string.IsNullOrEmpty(StandardOutput) && string.IsNullOrEmpty(StandardError))
+                        // ReturnsExeciutions.ReturnsEmails(command, "the command was received.", cmdOutput ?? "", _appSettings);
 
-            Console.WriteLine(StandardOutput);
+                        Console.WriteLine(StandardOutput);
             Console.WriteLine(StandardError);
 
             if (!string.IsNullOrEmpty(StandardError))

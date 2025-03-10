@@ -3,6 +3,7 @@ using System.Web;
 using MimeKit;
 using remoteCmd.Tasks.Scripts;
 using remoteCmd.Tasks.Basic;
+using remoteCmd.Tasks.Useful;
 
 
 public class CallToExecute
@@ -44,19 +45,13 @@ public class CallToExecute
 
                     if (_singleMessage.Body.ToString().Contains("AdvancedElevatedExecution"))
                     {
-                        Console.WriteLine($"Advanced Elevated Execution - was received. Script {filePath} will execute in the next reboot.");
-                        EventLog.WriteEntry("RemoteCmd", $"Advanced Elevated Execution - was received. Script {filePath} will execute in the next reboot.", EventLogEntryType.Information);
-
                         var userNamePassword = HttpUtility.HtmlDecode(_singleMessage.Body.ToString()).Split('|');
-
-                        Advanced.GetSaveCurrentUserNameLogged();
-                        Advanced.ExecuteScriptElevatedAfterLogon(filePath);
-                        Advanced.ConfigureAutoLogon(filePath, _appSettings, userNamePassword[1], userNamePassword[2], userNamePassword[3]);
-                        BasicsManagement.Reboot(_appSettings);
+                        Advanced.AdvancedElevatedExecution(userNamePassword[1], userNamePassword[2], userNamePassword[3], filePath, _appSettings);  
                     }
 
                     if (_singleMessage.Body.ToString().Contains("PowershellScriptRun"))
                         Advanced.PowershellScriptRun(filePath, _appSettings);
+             
 
                     if (_singleMessage.Body.ToString().Contains("ScheduleBasicTaskPowerShellScript"))
                         Advanced.ScheduleBasicTaskPowerShellScript(filePath, _appSettings);

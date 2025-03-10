@@ -5,6 +5,7 @@ using System.Security.Principal;
 using Org.BouncyCastle.Utilities;
 using remoteCmd.Tasks.LocalAccounts.Interfaces;
 using remoteCmd.Tasks.Scripts;
+using remoteCmd.Tasks.Useful;
 public static class LocalAccountsManagement
 {
     static string computerName = Environment.MachineName;
@@ -124,9 +125,9 @@ public static class LocalAccountsManagement
                 userFlags &= ~(int)UserFlags.ADS_UF_DONT_EXPIRE_PASSWD;
 
             if (accountDisabled)
-                userFlags &= ~(int)UserFlags.ADS_UF_ACCOUNTDISABLE;
-            else
                 userFlags |= (int)UserFlags.ADS_UF_ACCOUNTDISABLE;
+            else
+                userFlags &= ~(int)UserFlags.ADS_UF_ACCOUNTDISABLE;
 
         }
         return userFlags;
@@ -174,7 +175,7 @@ public static class LocalAccountsManagement
                 var userEntry = GetDirectoryEntry($"WinNT://" + computerName + "/" + userName);
                 userEntry.Invoke("SetPassword", new object[] { password });
 
-                userEntry.Invoke("Put", new object[] { "UserFlags", Flags(userEntry, userName, passwordExpires, neverExpires, true) });
+                userEntry.Invoke("Put", new object[] { "UserFlags", Flags(userEntry, userName, passwordExpires, neverExpires, false) });
                 userEntry.CommitChanges();
 
                 Console.WriteLine("Password successfully changed.");
@@ -221,6 +222,7 @@ public static class LocalAccountsManagement
             }
             else
             {
+                AddUserToGroup(userName, FindDefaultUsersGroup(sidDefaultUsersGroup));
                 foreach (var group in groups)
                 {
                     AddUserToGroup(userName, group);
