@@ -53,11 +53,11 @@ public class Tools
         if (noEmailReturnTasks)
         {
             if (!string.IsNullOrEmpty(StandardOutput))
-                Sender.SendEmail(_appSettings.ServerSmtp.UserName, $"{(!cmdOutputChek ? cmdOutput : command)} - Result action Output - {Environment.MachineName} - {DateTime.Now}", $"{StandardOutput}", "", _appSettings);
+                Sender.SendEmail(_appSettings.ServerSmtp.UserName, $"{(!cmdOutputChek ? cmdOutput : command)} - Result action Output - {Environment.MachineName} - {DateTime.Now}", $"{StandardOutput} ", "", _appSettings);
 
 
             if (!string.IsNullOrEmpty(StandardError))
-                Sender.SendEmail(_appSettings.ServerSmtp.UserName, $"{(!cmdOutputChek ? cmdOutput : command)} - Result error action returned - {Environment.MachineName} - {DateTime.Now}", $"{StandardError}", "", _appSettings);
+                Sender.SendEmail(_appSettings.ServerSmtp.UserName, $"{(!cmdOutputChek ? cmdOutput : command)} - Result error action returned - {Environment.MachineName} - {DateTime.Now}", $"{StandardError} ", "", _appSettings);
 
             if (string.IsNullOrEmpty(StandardOutput) && string.IsNullOrEmpty(StandardError))
                 Sender.SendEmail(_appSettings.ServerSmtp.UserName, $"{(!cmdOutputChek ? cmdOutput : command)} - the command was received. - {Environment.MachineName} - {DateTime.Now}", cmdOutput ?? "", "", _appSettings);

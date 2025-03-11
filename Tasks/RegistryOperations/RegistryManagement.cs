@@ -31,7 +31,7 @@ public class RegistryManagement
         return false;
     }
 
-    public static string GetRegistryValue(RegistryKey root, string key, string name)
+    public static dynamic GetRegistryValue(RegistryKey root, string key, string name)
     {
         var registryKey = registryKeyCheck(root);
         var subKey = registryKey.OpenSubKey(key);

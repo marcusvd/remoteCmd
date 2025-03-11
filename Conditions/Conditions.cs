@@ -2,10 +2,12 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
 using MailKit;
+using Microsoft.Win32;
 using PasswordManagement;
 using remoteCmd.Tasks.Basic;
 using remoteCmd.Tasks.LocalAccounts;
 using remoteCmd.Tasks.Network;
+using remoteCmd.Tasks.RegistryOperations;
 using remoteCmd.Tasks.Reports;
 using remoteCmd.Tasks.Scripts;
 
@@ -51,20 +53,22 @@ public class Conditions
         var computerToExecute = computerFound;
 
 
-        var LastExecution = JsonManagement.LoadJson(pathJson);
+       // var LastExecution = JsonManagement.LoadJson(pathJson);
+         var LastExecution = int.Parse(RegistryManagement.GetRegistryValue(Registry.LocalMachine, "SOFTWARE\\RemoteCmd", "LastExecution"));
 
 
-        if (uniqueId > LastExecution.ServiceConf.LastExecution)
+        if (uniqueId > LastExecution)
         {
 
             if (checkGroup && computerToExecute)
             {
 
-                LastExecution.ServiceConf.LastExecution = uniqueId;
+                LastExecution = uniqueId;
+                // string last = uniqueId.ToString();
+                // var path = JsonManagement.jsonPath;
 
-                var path = JsonManagement.jsonPath;
-
-                JsonManagement.JsonWrite(path ?? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AppSettings.json"), LastExecution);
+               // JsonManagement.JsonWrite(path ?? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AppSettings.json"), LastExecution);
+                 RegistryManagement.CreateRegistryEntry(Registry.LocalMachine, "SOFTWARE\\RemoteCmd", "LastExecution", LastExecution);
 
                 var singleMessage = inbox.GetMessage(msg.Index);
 
@@ -82,6 +86,7 @@ public class Conditions
                     SoftwareCalledTasks.ActionPreDefinedsToExecute(singleMessage.Body.ToString(), _appSettings);
                     NetworkCalledTasks.ActionPreDefinedsToExecute(singleMessage.Body.ToString(), _appSettings);
                     HardwareCalledTasks.ActionPreDefinedsToExecute(singleMessage.Body.ToString(), _appSettings);
+                    
                     // if (singleMessage.Body.ToString().Contains("PowershellScriptRun"))
                     // {
                     //       Basics.PowershellScriptRun(command, _appSettings);

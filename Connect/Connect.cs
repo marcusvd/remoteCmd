@@ -24,11 +24,16 @@ public class Connect : BackgroundService
         _logger = logger;
 
         _appSettings = configuration.Get<AppSettings>() ?? new AppSettings();
+
+         var LastExecutionKey = RegistryManagement.GetRegistryValue(Registry.LocalMachine, "SOFTWARE\\RemoteCmd", "LastExecution");
+         if (string.IsNullOrEmpty(LastExecutionKey))
+             RegistryManagement.CreateRegistryEntry(Registry.LocalMachine, "SOFTWARE\\RemoteCmd", "LastExecution", 0);
+
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-       
+
         while (!stoppingToken.IsCancellationRequested)
         {
             _logger.LogInformation("Checking new messages at: {time}", DateTime.Now);

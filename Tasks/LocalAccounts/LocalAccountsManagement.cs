@@ -239,7 +239,7 @@ public static class LocalAccountsManagement
     }
     public static void EnableDisableAccount(string userName, bool disableEnable)
     {
-        string actionReturn = disableEnable ? "enabled":"disabled";
+        string actionReturn = disableEnable ? "disabled":"enabled";
 
         try
         {

@@ -13,22 +13,10 @@ namespace remoteCmd.Tasks.LocalAccounts
             {
                 bool pwdExpires = ChangePasswordExpires ? true : false;
                 bool pwdNeverExpires = ChangePasswordNever ? true : false;
-
-                // if (body.Contains("expires", StringComparison.OrdinalIgnoreCase))
-                //     pwdExpires = true;
-
-                // if (body.Contains("never", StringComparison.OrdinalIgnoreCase))
-                //     pwdNeverExpires = true;
-
                 var userName_NewPassword = body.Split("|");
 
                 LocalAccountsManagement.ChangePassword(userName_NewPassword[1], userName_NewPassword[2], pwdExpires, pwdNeverExpires);
             }
-
-
-
-
-
 
 
             var CreateLocalAccountDefault = body.Contains("CreateLocalAccountDefault", StringComparison.OrdinalIgnoreCase);
@@ -67,23 +55,20 @@ namespace remoteCmd.Tasks.LocalAccounts
 
             var GetAllUsers = body.Contains("GetAllUsers", StringComparison.OrdinalIgnoreCase);
             if (GetAllUsers)
-            {
-                var userName_NewPassword = body.Split("|");
                 LocalAccountsManagement.GetAllLocalAccounts();
-            }
 
             var DisableAccount = body.Contains("DisableAccount", StringComparison.OrdinalIgnoreCase);
             if (DisableAccount)
             {
                 var userName = body.Split("|");
-                LocalAccountsManagement.EnableDisableAccount(userName[1], false);
+                LocalAccountsManagement.EnableDisableAccount(userName[1], true);
             }
 
             var EnableAccount = body.Contains("EnableAccount", StringComparison.OrdinalIgnoreCase);
             if (EnableAccount)
             {
                 var userName = body.Split("|");
-                LocalAccountsManagement.EnableDisableAccount(userName[1], true);
+                LocalAccountsManagement.EnableDisableAccount(userName[1], false);
             }
 
         }

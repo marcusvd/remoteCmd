@@ -1,4 +1,3 @@
-using remoteCmd.Tasks.Basics;
 
 namespace remoteCmd.Tasks.Basic;
 public class BasicsCalledTasks
@@ -19,10 +18,6 @@ public class BasicsCalledTasks
         var reboot = body.Contains("reboot", StringComparison.OrdinalIgnoreCase);
         if (reboot)
             BasicsManagement.Reboot(_appSettings);
-       
-        var getScreen = body.Contains("getScreen", StringComparison.OrdinalIgnoreCase);
-        if (getScreen)
-            GetScreen.GetPrintScreen(_appSettings);
     }
 
 

@@ -73,11 +73,22 @@ CreateLocalAccountPasswordNeverExpires|Maria|123|
 //--------------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------------
-//Cria o usuário adiciona ele nos grupos Utilizadores e Administradores,  senha expira no primeiro logon.
+Cria o usuário adiciona ele nos grupos Utilizadores e Administradores,  senha expira no primeiro logon.
 CreateLocalAccountPasswordExpires|Maria|123|Groups:[Utilizadores#Administradores]
 
 //Cria o usuário adiciona ele no grupo Utilizadores  senha expira no primeiro logon.
 CreateLocalAccountPasswordExpires|Maria|123|
+//--------------------------------------------------------------------------------------------------------------
+
+//--------------------------------------------------------------------------------------------------------------
+Desabilita uma conta de usuário;
+DisableAccount|jurema|
+
+//--------------------------------------------------------------------------------------------------------------
+
+//--------------------------------------------------------------------------------------------------------------
+Habilita uma conta de usuário;
+EnableAccount|jurema|
 //--------------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------------

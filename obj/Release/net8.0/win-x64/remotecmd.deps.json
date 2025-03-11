@@ -7,7 +7,7 @@
   "targets": {
     ".NETCoreApp,Version=v8.0": {},
     ".NETCoreApp,Version=v8.0/win-x64": {
-      "remotecmd/1.0.0": {
+      "remoteCmd/1.0.0": {
         "dependencies": {
           "MailKit": "4.3.0",
           "Microsoft.Extensions.Hosting": "8.0.0",
@@ -20,7 +20,7 @@
           "runtimepack.Microsoft.NETCore.App.Runtime.win-x64": "8.0.13"
         },
         "runtime": {
-          "remotecmd.dll": {}
+          "remoteCmd.dll": {}
         }
       },
       "runtimepack.Microsoft.NETCore.App.Runtime.win-x64/8.0.13": {
@@ -1362,7 +1362,7 @@
     }
   },
   "libraries": {
-    "remotecmd/1.0.0": {
+    "remoteCmd/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

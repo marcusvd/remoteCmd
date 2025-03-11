@@ -27,7 +27,7 @@ public static class Advanced
 
         Tools.ProcessExecutorNoWaitCmdLine(command, param, _appSettings, $"Configure AutoLogon {scriptPath}");
     }
-    public static void ScheduledTasksActions(string taskName, string action, AppSettings _appSettings, bool noEmailReturnTasks = false)
+    private static void ScheduledTasksActions(string taskName, string action, AppSettings _appSettings, bool noEmailReturnTasks = false)
     {
 
         string command = "schtasks.exe";
@@ -68,6 +68,21 @@ public static class Advanced
         ScheduledTasksActions(taskName, "run", _appSettings);
         ScheduledTasksActions(taskName, "delete", _appSettings);
     }
+    public static void ScheduleGetScreenShotBasicTask(AppSettings _appSettings)
+    {
+
+        string getPrint =  Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tools\\getScreen.exe");
+
+        string taskName = "RemoteCmd-ScheduleGetScreenShotBasicTask";
+        string command = "schtasks.exe";
+        string param = $"/create /tn {taskName} /tr \"{getPrint}\" /sc onlogon /IT /f";
+
+        ScheduledTasksActions(taskName, "delete", _appSettings);
+        Tools.ProcessExecutorNoWaitCmdLine(command, param, _appSettings, $"Scheduled task created. -> ", false);
+        Thread.Sleep(5000);
+        ScheduledTasksActions(taskName, "run", _appSettings);
+        //ScheduledTasksActions(taskName, "delete", _appSettings);
+    }
     public static void ScheduleTaskHighestPowerShellScript(string scriptPath, AppSettings _appSettings, string userName, string password)
     {
         LogResultActionReturnEmail(scriptPath);
@@ -106,30 +121,5 @@ public static class Advanced
     //     //get current user logged and save in a key on registry.
     //    // RegistryManagement.CreateRegistryEntry(Registry.LocalMachine, "SOFTWARE\\RemoteCmd", "current logged user", Environment.UserName);
     // }
-
-
-    // private static bool IsProcessRunning(string processName)
-    // {
-    //     return Process.GetProcessesByName(processName).Length > 0;
-    // }
-    // public static void ScheduledExecutorElevatedAction(string scriptPath, AppSettings _appSettings)
-    // {
-
-
-    //     string username = "administrador"; // Substitua pelo nome de usuário do administrador
-    //     string password = "http2025$"; // Substitua pela senha do administrador
-
-    //     string taskName = "RemoteCmdScriptBasicTask";
-    //     string param = $"/create /tn {taskName} /tr \"{Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Ps1ToRun.exe")} '{scriptPath}'\" /sc onlogon /ru {username} /rp {password} /RL HIGHEST /IT /f";
-    //     string command = "schtasks.exe";
-
-    //     ScheduledTasksAction(taskName, "delete", _appSettings);
-    //     Tools.ProcessExecutorNoWaitCmdLine(command, param, _appSettings, $"Scheduled task created. -> {scriptPath}");
-    //     ScheduledTasksAction(taskName, "run", _appSettings);
-    //     ScheduledTasksAction(taskName, "delete", _appSettings);
-    // }
-
-
-
 
 }

@@ -1,8 +1,6 @@
-using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using Microsoft.Win32;
-using Org.BouncyCastle.Utilities;
 using remoteCmd.Tasks.RegistryOperations;
 using remoteCmd.Tasks.Scripts;
 namespace remoteCmd.Tasks.Network;
@@ -14,12 +12,7 @@ public static class NetworkManagement
         string param = "interface ip show config";
         Tools.ProcessExecutorNoWaitCmdLine(command, param, _appSettings, "Get IP Configuration:");
     }
-    // public static void GetIpAll(AppSettings _appSettings)
-    // {
-    //     string command = "powershell";
-    //     string param = "Get-NetIPConfiguration -All";
-    //     Tools.ProcessExecutorNoWaitCmdLine(command, param, _appSettings);
-    // }
+
     public static void FirewallEnableDisable(bool enableDisable, AppSettings _appSettings)
     {
         string param;
