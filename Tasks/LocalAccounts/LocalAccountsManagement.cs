@@ -25,7 +25,7 @@ public static class LocalAccountsManagement
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
-            Sender.SendEmail(BasePath.AppSettingsJsonFile.ServerSmtp.UserName, $"Internal Error - {Environment.MachineName} - {DateTime.Now}", $"Some things wrong with accounts. {ex.Message}", "", BasePath.AppSettingsJsonFile);
+            Sender.SendEmail(BasePath.AppSettingsJsonFile.ServerSmtp.UserName, $"Internal Error - {Environment.MachineName} - {DateTime.Now}", $"Something went wrong; with accounts. {ex.Message}", "", BasePath.AppSettingsJsonFile);
         }
         return null;
     }
@@ -52,7 +52,7 @@ public static class LocalAccountsManagement
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
-            Sender.SendEmail(BasePath.AppSettingsJsonFile.ServerSmtp.UserName, $"Password no changed for {userName} - {Environment.MachineName} - {DateTime.Now}", $"Some things wrong, password no changed: {userName} {ex.Message}", "", BasePath.AppSettingsJsonFile);
+            Sender.SendEmail(BasePath.AppSettingsJsonFile.ServerSmtp.UserName, $"Failure: one or more groups were not found during user creation. {userName} - {Environment.MachineName} - {DateTime.Now}", $"Something went wrong. Please check if the group names were entered correctly or if the groups exist. {userName} {ex.Message}", "", BasePath.AppSettingsJsonFile);
         }
         return false;
     }
@@ -234,7 +234,7 @@ public static class LocalAccountsManagement
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
-            Sender.SendEmail(BasePath.AppSettingsJsonFile.ServerSmtp.UserName, $"Failed to create account {userName} - {Environment.MachineName} - {DateTime.Now}", $"Some things wrong: {userName} {ex.Message}", "", BasePath.AppSettingsJsonFile);
+            Sender.SendEmail(BasePath.AppSettingsJsonFile.ServerSmtp.UserName, $"Failed to create account {userName} - {Environment.MachineName} - {DateTime.Now}", $"Something went wrong; {userName} {ex.Message}", "", BasePath.AppSettingsJsonFile);
         }
     }
     public static void EnableDisableAccount(string userName, bool disableEnable)
@@ -259,7 +259,7 @@ public static class LocalAccountsManagement
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
-            Sender.SendEmail(BasePath.AppSettingsJsonFile.ServerSmtp.UserName, $"Failed when try {actionReturn} account. {userName} - {Environment.MachineName} - {DateTime.Now}", $"Some things wrong: {userName} {ex.Message}", "", BasePath.AppSettingsJsonFile);
+            Sender.SendEmail(BasePath.AppSettingsJsonFile.ServerSmtp.UserName, $"Failed when try {actionReturn} account. {userName} - {Environment.MachineName} - {DateTime.Now}", $"Something went wrong; {userName} {ex.Message}", "", BasePath.AppSettingsJsonFile);
         }
     }
 }

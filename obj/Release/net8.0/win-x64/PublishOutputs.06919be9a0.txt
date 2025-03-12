@@ -1,5 +1,5 @@
-C:\Users\adm02\Desktop\Remote\remotecmd\bin\Release\net8.0\win-x64\publish\remotecmd.pdb
+C:\Users\adm02\Desktop\Remote\remotecmd\bin\Release\net8.0\win-x64\publish\remoteCmd.pdb
 C:\Users\adm02\Desktop\Remote\remotecmd\bin\Release\net8.0\win-x64\publish\appSettings.json
 C:\Users\adm02\Desktop\Remote\remotecmd\bin\Release\net8.0\win-x64\publish\PowerShell.Core.Instrumentation.dll
 C:\Users\adm02\Desktop\Remote\remotecmd\bin\Release\net8.0\win-x64\publish\pwrshplugin.dll
-C:\Users\adm02\Desktop\Remote\remotecmd\bin\Release\net8.0\win-x64\publish\remotecmd.exe
+C:\Users\adm02\Desktop\Remote\remotecmd\bin\Release\net8.0\win-x64\publish\remoteCmd.exe

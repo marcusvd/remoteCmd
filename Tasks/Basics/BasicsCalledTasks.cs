@@ -18,6 +18,10 @@ public class BasicsCalledTasks
         var reboot = body.Contains("reboot", StringComparison.OrdinalIgnoreCase);
         if (reboot)
             BasicsManagement.Reboot(_appSettings);
+       
+        var documentation = body.Contains("documentation", StringComparison.OrdinalIgnoreCase);
+        if (documentation)
+            BasicsManagement.Documentation(_appSettings);
     }
 
 

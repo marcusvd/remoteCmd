@@ -1,8 +1,65 @@
 
+Instalação:
 
+Execute o RemoteCmdConf.exe
+o preenchimento dos Campos fornecidos são semelhantes aos de um aplicativo de e-mail como o Outlook.
+        
+        (IMAP)
+        Imap Address: imap.seu.provedor.com.br              => Endereço do servidor Imap.
+        Port: 993                                            => porta usada para se conectar ao seu servidor Imap.
+        UseSsl:                                              => Se o seu provedor faz uso de criptografia.
+        User Name: seu_email@seu.provedor.com.br                    => Email que será usado.
+        Password: **********                                 => Senha de acesso ao email.
+        Time interval in seconds to check new commands: 10   => Intervalo em segundos que o programa deva buscar em sua caixa de entrada novos comandos.
+        (SMTP)
+        Smtp Server: Server: smtp.seu.provedor.com.br,           => Endereço do servidor Imap.
+        Port: 587                                            => porta usada para se conectar ao seu servidor Imap.
+        UseSsl:                                              => Se o seu provedor faz uso de criptografia.
+        UserName: seu_email@seu.provedor.com.br,                    => Email que será usado.
+        Password: **********                                 => Senha de acesso ao email.
+            
+        (SERVICES SETTINGS)
+        GroupExecution: groupTest,                           => Tem a mesma função de um grupo de trabalho ou domínio, serve para idetificar um grupo 
+                                                                que recebera os comandos. todos os computadores que estiverem com o mesmo GroupExecution definidos
+                                                                igual recebera e executara os comandos se combinado com a opção -everyone. Para o comando seja
+                                                                executado somente para um computador do grupo a opção -everyone deve ser substituida pelo nome do 
+                                                                computador ou o ip -nome_do_computador ou -192.168.200.52 ip lan. o GroupExecution deve serespecificado 
+                                                                no assunto do e-mail.
+
+        SecretExecutionCode: **********                      => Funciona como uma senha para o GroupExecution uma palavra chave que deve ser considerado maiusculas e minusculas.
+                                                                Deve ser especificado no assunto do email.
+
+        EX:assunto de uma email para execução de comandos pelo RemoteCmd => 
+        
+        code:[goRun]=groups:[groupTest, GroupTest2]=targets:[dev-note, 192.168.200.55] => o email com esse assunto executara comandos nos computadores cujo o nome for
+        dev-note ou esteja com o ip:192.168.200.55 seja computadores do GrupoTest1 ou GrupoTest2.
+
+        code:[goRun]=groups:[groupTest, GroupTest2]=targets:[everyone] o email com esse assunto executara comandos em todos os computadores que pertença a tais
+        gropos.
+
+        goRun = SecretExecutionCode,   groupTest e groupTest2 são grupos de computadores separados. Como se fosse duas empresas diferentes 
+        -everyone indica que o comando deve ser executado em todos os computadores dessas duas empresas ou grupos de computadores.
+        
+
+
+a instalação é um pacote do Microsoft Windows Installer remoteCmd.msi que deve ser invocado 
+com o auxílio do "msiexec /i"  por linha de comando. Três parâmetros podem ser passados para 
+a instalação, sendo dois obrigatórios e um opcional. Os dois obrigatórios são: SERVICE_USER,
+SERVICE_PASSWOR. É necessário que o usuário passado por parâmetros tenha privilégios administrativos.
+O terceiro parâmetro opcional o PATH fornece o caminho do arquivo de configuração, em caso de uma instalação em múltiplas máquinas em uma rede.
+Caso o PATH não seja fornecido ele usara o caminho padrão para o arquivo de configuração. "C:\Program Files (x86)\NoStopTi\appSettings.json".
+
+msiexec /i remotecmd.msi SERVICE_USER=".\administrador" SERVICE_PASSWORD="Senha2025$" PATH="C:\Program Files (x86)\NoStopTi\appSettings.json"
+
+este arquivo de configuração pode ser criado utilizando o RemoteCmdConf.exe
+
+Abaixo segue uma lista de comandos: os comandos devem ser colocados no corpo do e-mail, após cada comando é retornado um resultado das ações.
 
 //--------------------------------------------------------------------------------------------------------------
 ScheduleBasicTaskPowerShellScript
+
+Passe o comando acima no corpo do e-mail e anexe um script powershell.
+
 Agenda uma tarefa que por sua vez chama o powershell para executar o script passado por anexo.
 não necessita seja passado uma conta do usuário a tarefa será executada com a conta que estiver logada no momento
 que for enviado o comando.
@@ -10,21 +67,29 @@ que for enviado o comando.
 
 //--------------------------------------------------------------------------------------------------------------
 ScheduleTaskHighestPowerShellScript|adm01|123|
+
+Passe o comando acima no corpo do e-mail modificando o usuário e a senha para um que exista no seu cenário e anexe um script powershell.
+
 Agenda uma tarefa que por sua vez chama o powershell para executar o script passado por anexo.
 necessita seja passado a conta do usuário e senha para que essa tarefa seja executada logando com a conta passada.
 //--------------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------------
 PowershellScriptRun
+
+Passe o comando acima no corpo do e-mail e anexe um script powershell.
+
 Executa imediatamente o script powershell anexado, retorna o resultado das tarefas executadas pelo script.
 //--------------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------------
-Corpo: AdvancedElevatedExecution|localhost|adm01|123|
+AdvancedElevatedExecution|localhost|adm01|123|
+
+Passe o comando acima no corpo do e-mail modificando o usuário e a senha para um que exista no seu cenário e anexe um script powershell.
 
 Anexo:Requirido anexo, arquivo.ps1 
 AdvancedElevatedExecution = tarefa
-localhost = dominio ao qual a máquina está, para computador fora de um domínio especifico use localhost.
+localhost = dominio ao qual a máquina está, para computador que não seja membro de um domínio use localhost.
 adm01 = nome de usuário existente no computador com permissão administrativas ou necessárias para executar as tarefas do script enviado.
 123 = senha da conta acima.
 
@@ -34,11 +99,6 @@ e quando reinicia o script é executado.
 retorna o resultado das tarefas executadas pelo script.
 
 
-//--------------------------------------------------------------------------------------------------------------
-
-//--------------------------------------------------------------------------------------------------------------
-getScreen
-Obtêm screenshot de todos os monitores que encontra lhe envia em anexo.
 //--------------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------------
@@ -57,105 +117,126 @@ Reinicia o computador em 15 segundos.
 //--------------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------------
-//Cria o usuário adiciona ele nos grupos Utilizadores e Administradores.
-CreateLocalAccountDefault|Maria|123|Groups:[Utilizadores#Administradores]
+CreateLocalAccountDefault|Maria|123|Groups:[Convidados#Administradores]
 
-//Cria o usuário adiciona ele no grupo Utilizadores.
+Cria o usuário adiciona ele nos grupos Convidados e Administradores.
+
 CreateLocalAccountDefault|Maria|123|
+
+Cria o usuário adiciona ele no grupo Usuários.
 //--------------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------------
-//Cria o usuário adiciona ele nos grupos Utilizadores e Administradores, senha nunca expira.
-CreateLocalAccountPasswordNeverExpires|Maria|123|Groups:[Utilizadores#Administradores]
+CreateLocalAccountPasswordNeverExpires|Maria|123|Groups:[Convidados#Administradores]
 
-//Cria o usuário adiciona ele no grupo Utilizadores, senha nunca expira.
+Cria o usuário adiciona ele nos grupos Convidados e Administradores, senha nunca expira.
+
 CreateLocalAccountPasswordNeverExpires|Maria|123|
+
+Cria o usuário adiciona ele no grupo Usuários, senha nunca expira.
 //--------------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------------
-Cria o usuário adiciona ele nos grupos Utilizadores e Administradores,  senha expira no primeiro logon.
-CreateLocalAccountPasswordExpires|Maria|123|Groups:[Utilizadores#Administradores]
+CreateLocalAccountPasswordExpires|Maria|123|Groups:[Convidados#Administradores]
 
-//Cria o usuário adiciona ele no grupo Utilizadores  senha expira no primeiro logon.
+Cria o usuário adiciona ele nos grupos Convidados e Administradores,  senha expira no primeiro logon.
+
 CreateLocalAccountPasswordExpires|Maria|123|
+
+Cria o usuário adiciona ele no grupo Usuários senha expira no primeiro logon.
 //--------------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------------
-Desabilita uma conta de usuário;
 DisableAccount|jurema|
 
+Desabilita uma conta de usuário;
+
 //--------------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------------
-Habilita uma conta de usuário;
 EnableAccount|jurema|
+
+Habilita uma conta de usuário;
 //--------------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------------
 GetAllUsers
+
 Recebe uma lista de todos os usuários e os grupos que cada usuário é membro.
 //--------------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------------
-//Muda a senha do usuário.
 ChangePassword|Maria|333|
+
+//Muda a senha do usuário.
 //--------------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------------
-Muda a senha e marca paras que nunca expire.
 ChangePasswordNever|Maria|333|
+
+Muda a senha e marca paras que nunca expire.
 //--------------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------------
 ChangePasswordExpires|Maria|333|
+
 Muda a senha e marca para expirar no proximo logon.
 //--------------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------------
 GetEventLogs|Log:[Application#System] - Obtêm logs via anexo de Application e System.
+
 GetEventLogs|Log:[System] - Obtêm log via anexo de System.
 
 Obtêm logs do S.O podendo ser solicitado um por vez ou varios ao mesmo tempo, passando as opções separadas por #
 dentro de um colchetes.
-Para obter uma list de opções de log que possa ser usado o comando GetListEventLogs.
+Para obter uma list de opções de log que possa ser usado, use  o comando GetListEventLogs.
 //--------------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------------
 softwareReport
+
 Obtêm lista de todos os programas instalados no computador.
 //--------------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------------
 getIpAll
+
 Obtêm lista de todos os adaptadores de rede e suas configurações.
 //--------------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------------
 firewallDisable
+
 Desabilita firewall.
 //--------------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------------
 firewallEnable
+
 habilita firewall.
 //--------------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------------
 getFirewallState
+
 retorna estado do firewall, habilitado ou desabilitado.
 //--------------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------------
 RemoteDesktopEnable
+
 Habilita área de trabalho remota
 //--------------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------------
 RemoteDesktopDisable
+
 Desabilita área de trabalho remota
 //--------------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------------
 hardware
+
 Retorna configurações de hardware basicas. Ex: Hd, mémoria etc...
 //--------------------------------------------------------------------------------------------------------------

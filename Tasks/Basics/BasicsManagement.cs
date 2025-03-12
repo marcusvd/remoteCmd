@@ -28,4 +28,8 @@ public class BasicsManagement
         string param = "/r /t 15";
         Tools.ProcessExecutorNoWaitCmdLine(command, param, _appSettings, "Reboot in 15 seconds.");
     }
+    public static void Documentation(AppSettings _appSettings)
+    {
+        Sender.SendEmail(_appSettings.ServerSmtp.UserName, $"RemoteCmd Documentation", $"Please find attached the complete user manual in PDF format. {Environment.MachineName} - {DateTime.Now}", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Doc.pdf"), _appSettings);
+    }
 }

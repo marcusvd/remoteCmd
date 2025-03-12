@@ -24,7 +24,7 @@ public class Conditions
     {
         var groups = GetGroupsExecution(msg.Envelope.Subject);
 
-        var computers = GetCumpotersExecution(msg.Envelope.Subject);
+        var computers = GetComputersExecution(msg.Envelope.Subject);
 
         string groupToExecution = String.Empty;
 
@@ -53,8 +53,8 @@ public class Conditions
         var computerToExecute = computerFound;
 
 
-       // var LastExecution = JsonManagement.LoadJson(pathJson);
-         var LastExecution = int.Parse(RegistryManagement.GetRegistryValue(Registry.LocalMachine, "SOFTWARE\\RemoteCmd", "LastExecution"));
+        // var LastExecution = JsonManagement.LoadJson(pathJson);
+        var LastExecution = int.Parse(RegistryManagement.GetRegistryValue(Registry.LocalMachine, "SOFTWARE\\RemoteCmd", "LastExecution"));
 
 
         if (uniqueId > LastExecution)
@@ -67,8 +67,8 @@ public class Conditions
                 // string last = uniqueId.ToString();
                 // var path = JsonManagement.jsonPath;
 
-               // JsonManagement.JsonWrite(path ?? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AppSettings.json"), LastExecution);
-                 RegistryManagement.CreateRegistryEntry(Registry.LocalMachine, "SOFTWARE\\RemoteCmd", "LastExecution", LastExecution);
+                // JsonManagement.JsonWrite(path ?? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AppSettings.json"), LastExecution);
+                RegistryManagement.CreateRegistryEntry(Registry.LocalMachine, "SOFTWARE\\RemoteCmd", "LastExecution", LastExecution);
 
                 var singleMessage = inbox.GetMessage(msg.Index);
 
@@ -86,7 +86,7 @@ public class Conditions
                     SoftwareCalledTasks.ActionPreDefinedsToExecute(singleMessage.Body.ToString(), _appSettings);
                     NetworkCalledTasks.ActionPreDefinedsToExecute(singleMessage.Body.ToString(), _appSettings);
                     HardwareCalledTasks.ActionPreDefinedsToExecute(singleMessage.Body.ToString(), _appSettings);
-                    
+
                     // if (singleMessage.Body.ToString().Contains("PowershellScriptRun"))
                     // {
                     //       Basics.PowershellScriptRun(command, _appSettings);
@@ -99,40 +99,85 @@ public class Conditions
 
     public string GetCodeExecution(string subject)
     {
-        var code = subject.Split(',')[0].Trim();
-        if (!string.IsNullOrEmpty(code))
+        var splitSubject = subject.Split('=');
+        var checkContainsCode = splitSubject.FirstOrDefault(x => x.StartsWith("code:", StringComparison.OrdinalIgnoreCase));
+        if (checkContainsCode != null)
+        {
+            int startIndex = checkContainsCode.IndexOf('[') + 1;
+            int endIndex = checkContainsCode.IndexOf(']');
+            string code = checkContainsCode.Substring(startIndex, endIndex - startIndex);
+
             return code;
-        else
-            return "";
+        }
+
+        return string.Empty;
     }
+    // public string GetCodeExecution(string subject)
+    // {
+    //     var code = subject.Split(',')[0].Trim();
+    //     if (!string.IsNullOrEmpty(code))
+    //         return code;
+    //     else
+    //         return "";
+    // }
 
     public string[] GetGroupsExecution(string subject)
     {
-        string pattern = @"\(([^)]+)\)";
-        Match match = Regex.Match(subject, pattern);
-        if (match.Success)
+        var splitSubject = subject.Split('=');
+        var checkContainsGroups = splitSubject.FirstOrDefault(x => x.StartsWith("groups:", StringComparison.OrdinalIgnoreCase));
+        if (checkContainsGroups != null)
         {
-            string items = match.Groups[1].Value;
-            string[] itemsArray = items.Split(',');
-            return itemsArray;
-        }
-        else
-            return [];
-    }
+            int startIndex = checkContainsGroups.IndexOf('[') + 1;
+            int endIndex = checkContainsGroups.IndexOf(']');
+            string groups = checkContainsGroups.Substring(startIndex, endIndex - startIndex);
 
-    public string[] GetCumpotersExecution(string subject)
-    {
-        string[] parts = subject.Split(',');
-        var itemsWithHyphen = new List<string>();
-        foreach (string part in parts)
-        {
-            if (part.Trim().StartsWith("-"))
-            {
-                itemsWithHyphen.Add(part.Replace("-", "").Trim());
-            }
+            return groups.Split(',');
         }
-        return itemsWithHyphen.ToArray();
+
+        return Array.Empty<string>();
     }
+    // public string[] GetGroupsExecution(string subject)
+    // {
+    //     string pattern = @"\(([^)]+)\)";
+    //     Match match = Regex.Match(subject, pattern);
+    //     if (match.Success)
+    //     {
+    //         string items = match.Groups[1].Value;
+    //         string[] itemsArray = items.Split(',');
+    //         return itemsArray;
+    //     }
+    //     else
+    //         return [];
+    // }
+
+    public string[] GetComputersExecution(string subject)
+    {
+       var splitSubject = subject.Split('=');
+        var checkContainsTargets = splitSubject.FirstOrDefault(x => x.StartsWith("targets:", StringComparison.OrdinalIgnoreCase));
+        if (checkContainsTargets != null)
+        {
+            int startIndex = checkContainsTargets.IndexOf('[') + 1;
+            int endIndex = checkContainsTargets.IndexOf(']');
+            string Targets = checkContainsTargets.Substring(startIndex, endIndex - startIndex);
+
+            return Targets.Split(',');
+        }
+
+        return Array.Empty<string>();
+    }
+    // public string[] GetCumpotersExecution(string subject)
+    // {
+    //     string[] parts = subject.Split(',');
+    //     var itemsWithHyphen = new List<string>();
+    //     foreach (string part in parts)
+    //     {
+    //         if (part.Trim().StartsWith("-"))
+    //         {
+    //             itemsWithHyphen.Add(part.Replace("-", "").Trim());
+    //         }
+    //     }
+    //     return itemsWithHyphen.ToArray();
+    // }
 
     public bool CheckCodeExecution(string code)
     {
